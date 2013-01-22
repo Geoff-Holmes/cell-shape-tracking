@@ -1,32 +1,22 @@
-#!usr/bin/python
+#!usr/bin/pthon
 
 import numpy as np
+import pylab as pb
+import Basis, Bspline
 
-class Bspline :
+knots = range(7)
+N = len(knots)
+B = Basis.Basis(knots)
+s = np.linspace(0,N-1,100)
+# Q = np.random.random((2,N-1))
+Q = np.vstack((np.array([1, 1, 3, 4, 5, 3]), np.array([1, 6, 4, 6, 1, 3])))
+shape = B(Q, s)
+shape[:,-1] = shape[:,0]
 
-    def __init__(self, n):
-        self.offset = n
-
-    def __call__(self, s):
-        s = float(s - self.offset)
-        if s<0:
-            B = 0
-        elif s<1:
-            B = np.power(s,2)/2
-        elif s<2:
-            B = .75 - np.power(s-1.5, 2)
-        elif s<3:
-            B = np.power(s-3,2)/2
-        else:
-            B = 0
-        return B
-
-
-class BsplineV :
-
-    def __init__(self, n):
-        self.offset = n
-
-    def __call__(self, s):
-        B = np.power(s,2)/2*np.vstack((0<=s, s<1)).all(0) + (.75-np.power(s-1.5,2))*np.vstack((1<=s, s<2)).all(0) + np.power(s-3,2)/2*np.vstack((2<=s, s<3)).all(0)
-        return B
+pb.ion()
+pb.plot(Q[0,:], Q[1,:], 'r+')
+pb.plot(shape[0,:], shape[1,:])
+pb.axis([0, 6, 0, 7])
+pb.figure()
+for b in B.Bsplines:
+    pb.plot(b(s))
