@@ -8,7 +8,6 @@ classdef grhCell
         ctrlPts;     % list 
         covariance;  % list
         obsRefs;     % list of observations allocated to this cell
-        Bspline = grhBspline();
         
         
     end
