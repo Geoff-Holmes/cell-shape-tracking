@@ -9,23 +9,20 @@ def go():
     reload(Bases)
 
     # create bSpline
-    L = 5
+    L = 33
     B = Bases.Base(L,prdc=1)
-
-    print B.G
-    print B.BS
 
     # create data
     Ndata = 100
-    R = 100
+    R = 10
     r = R
     e = 0
 
     data = np.zeros(Ndata, dtype=complex)
     for i in range(Ndata):
         data[i] = r * np.exp(np.pi+2*np.pi*1j*i/Ndata)
-        r = r - 0.1*(r-R) + e
-        #e += np.random.normal(0,1)
+        r = r - .1*(r-R) + e
+        e += np.random.normal(0,1)
 
     # fit bSpline
     ctrlPts = B.dataFit(data)
