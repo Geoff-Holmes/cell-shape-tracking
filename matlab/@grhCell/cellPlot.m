@@ -1,5 +1,5 @@
-function cellPlot(obj, i, Bspline)
+function cellPlot(obj, i)
 
 % plot the cell outline at time i using basis Bspline
 
-plot(Bspline.curve(obj.ctrlPts{i}))
+plot(obj.Bspline.curve(obj.ctrlPts{i}))

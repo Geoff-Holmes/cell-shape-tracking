@@ -1,4 +1,4 @@
-classdef grhBspline
+classdef grhBspline < handle
     
     % periodic Bspline function
     
