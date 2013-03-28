@@ -13,8 +13,8 @@ for k = 2:obj.DataL
     obj.centroidDistances{k-1} ...
         = abs(dist(obj.frames{k-1}.centroids', obj.frames{k}.centroids));
     
-    for i = obj.liveTracks
-        prediction{i} = obj.Model.A * obj.cells{i}.ctrlPts{k-1};
-    end
-    
+%     for i = obj.liveTracks
+%         prediction{i} = obj.Model.A * obj.cells{i}.ctrlPts{k-1};
+%     end
+%     prediction
 end

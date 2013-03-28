@@ -1,0 +1,40 @@
+classdef grhShapeTemplate < grhSnake
+    
+    properties
+        
+        W;
+        H;
+        Wplus;
+        
+    end
+    
+    methods
+        
+        function obj = grhShapeTemplate(Q0, Bspline, shapeSpace)
+            
+            obj = obj@grhSnake(Q0, Bspline);
+            
+            switch shapeSpace
+                case 'euclideanSimilarities'
+                    display('This shape space is not yet defined')
+                    
+                case 'planarAffine'
+                    Qx = real(Q0);
+                    Qy = imag(Q0);
+                    Z = zeros(obj.Bspline.L, 1);
+                    I = ones(size(Z));
+                    % transformation matrix Blake p.76
+                    obj.W = [I Z Qx Z Z Qy; Z I Z Qy Qx Z];
+                    % curve metric matrix Blake p.59
+                    Z = zeros(size(obj.MB));
+                    U = [obj.MB Z; Z obj.MB];
+                    
+                    
+                    
+                    
+            end
+        end
+    end
+end
+                
+        
