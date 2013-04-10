@@ -8,6 +8,7 @@ classdef grhBspline < handle
         d    =  4; % dimension of basis functions
         BS       ; % spline matrix - same for each span in this case
         G        ; % placement matrices
+        BSG      ; % prodcut of BS*G{i} for each i
         bsig     ; % first function supported by each span
         P        ; % Hilbert matrix for metrics Blake p293
         MB       ; % metric matrix Blake p293
@@ -25,8 +26,9 @@ classdef grhBspline < handle
                 obj.d    = d;
             end
             % load correct spline matrix
-            fl = ['_d' num2str(obj.d) '_L' num2str(obj.L) '_prdc'];
-            temp   = load(['@grhBspline/splineMatrices/BS' fl]);
+%             fl = ['_d' num2str(obj.d) '_L' num2str(obj.L) '_prdc'];
+            fl = ['_d' num2str(obj.d) '_prdc'];
+            temp   = load(['~/Dropbox/activeContours/matlab/@grhBspline/splineMatrices/BS' fl]);
             obj.BS = temp.BS;
             % determine which basis is first for each span
             obj.bsig = [(obj.L-obj.d+2):obj.L 1:(obj.L-obj.d+1)];
@@ -41,6 +43,7 @@ classdef grhBspline < handle
                     end
                     obj.G(i,j,k) = 1;
                 end
+                obj.BSG{k} = obj.BS * obj.G(:,:,k); 
             end
             % construct Hilbert matrix
             [temp2, temp1] = meshgrid(1:obj.d, 1:obj.d);

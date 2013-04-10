@@ -1,7 +1,6 @@
 classdef grhModel
 
     % Create Model object for kalman filtering / smoothing
-
     %    Model:
     %     X(t+1) = AX(t) + w, w~N(0,W),
     %     Y(t)   = CX(t) + v, v~N(0,V), V = vI
@@ -29,7 +28,7 @@ classdef grhModel
             nA = size(A);
             nC = size(C);
             nW = size(W);
-            assert(sum(nA==nW)==2);
+            assert(sum(nA==nW)==size(nA,2));
             assert(nA(1) == nC(2));
             if numel(v) > 1, v = v(1); end
             obj.A = A;

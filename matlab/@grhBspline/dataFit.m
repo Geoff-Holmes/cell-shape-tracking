@@ -1,4 +1,4 @@
-function ctrlPts =  dataFit(obj, data, plt)
+function [ctrlPts, snake] =  dataFit(obj, data, plt)
 
     % Determine control points to fit spline function to inputted data
     % data is complex representation of x-y data
@@ -33,3 +33,5 @@ function ctrlPts =  dataFit(obj, data, plt)
         plot(obj.curve(ctrlPts))
         plot(ctrlPts, 'r+')
     end
+    
+    snake = grhSnake(ctrlPts, obj);

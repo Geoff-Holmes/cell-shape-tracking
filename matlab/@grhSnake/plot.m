@@ -1,3 +1,4 @@
-function plot(obj)
+function plot(obj, colour)
 
-plot(obj.Bspline.curve(obj.ctrlPts))
+if nargin ==1, colour = 'b'; end
+plot(obj.Bspline.curve(obj.ctrlPts), colour)

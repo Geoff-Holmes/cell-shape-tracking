@@ -11,6 +11,9 @@ if nargin > 4
     obj.C = C;
 end
 
+szX0 = size(X0);
+if szX0(2) > szX0(1), X0 = X0'; end
+
 szY = size(Y);
 V = obj.v * eye(szY(1));
 
@@ -41,7 +44,7 @@ if szY(2) > 1
 %         for t in range(1,T):
 % 
 %             % model state update
-%             Xhat = np.dot(A[t-1], X[t-1])
+%             Xhat = A * X(:,t-1);
 %             % model covariance update
 %             P.append(np.dot(np.dot(A[t-1], Q[t-1]), A[t-1].transpose()) + W[t-1])
 %             % calculate Kalman gain
