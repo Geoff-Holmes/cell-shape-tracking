@@ -45,7 +45,9 @@ for k = 2:obj.DataL
         - obj.cells{iCell}.getCentroid(k-1);
     
     % get normal to previous position at start of curve
-    nrm0 = Mg.B
+    % in complex normal is i * tangent
+    nrm0 = 1i * obj.Bspline.tangent(obj.cells{iCell}.snake{k-1}, 0);
+    nrm0 = nrm0 / abs(nrm0);
     
     
     % construct C matrix

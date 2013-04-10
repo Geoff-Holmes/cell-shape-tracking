@@ -22,7 +22,7 @@ classdef grhCell < handle
             obj.firstSeen = firstSeen;
             obj.lastSeen = firstSeen;
             obj.Bspline = Bspline;
-            obj.snake = grhSnake(ctrlPts, obj.Bspline);
+            obj.snake(1) = grhSnake(ctrlPts, obj.Bspline);
             obj.covariance{1} = covariance;
             obj.centroid(1) = centroid;
             obj.obsRefs(1) = obsRefs;

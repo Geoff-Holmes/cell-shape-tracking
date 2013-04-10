@@ -5,7 +5,7 @@ function obj = addObservation(obj, ctrlPts, covariance, centroid, obsRefs)
 % display('adding observation')
 
 obj.lastSeen = obj.lastSeen + 1;
-obj.ctrlPts{end+1} = ctrlPts;
+obj.snake(end+1) = grhSnake(ctrlPts, obj.Bspline);
 obj.covariance{end+1} = covariance;
 obj.centroid(end+1) = centroid;
 obj.obsRefs(end+1) = obsRefs;

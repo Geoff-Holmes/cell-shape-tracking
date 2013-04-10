@@ -45,7 +45,8 @@ for k = 2:obj.DataL
         - obj.cells{iCell}.getCentroid(k-1);
     
     % get normal to previous position at start of curve
-    nrm0 = obj.Bspline.tangent(obj.cells{iCell}.ctrlPts{k-1}, 0);
+    % in complex normal is i * tangent
+    nrm0 = 1i * obj.cells{iCell}.snake(k-1).tangent(0);
     nrm0 = nrm0 / abs(nrm0);
     
     
@@ -54,7 +55,7 @@ for k = 2:obj.DataL
     
 %     Xnew = Filter(X0, Cov, Obs, ObsMat)
     [Xnew, ~, Qnew] = ...
-        obj.Model.Filter(obj.cells{iCell}.ctrlPts{k-1}, ...
+        obj.Model.Filter(obj.cells{iCell}.snake(k-1).ctrlPts, ...
         obj.cells{iCell}.covariance{k-1}, ...
         obj.frames{k}.bounds{ind}, C);
     

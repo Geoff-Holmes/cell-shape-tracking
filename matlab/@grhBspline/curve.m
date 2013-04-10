@@ -7,6 +7,10 @@ function F = curve(obj, ctrlPts, s, divs)
 %     otherwise evaluation over range of Bspline
 %     with number of divisions divs
 
+    if isa(ctrlPts, 'grhSnake')
+        ctrlPts = ctrlPts.ctrlPts;
+    end
+
     % make sure control points are correct size column vector
     assert(length(ctrlPts)==obj.L)
     if size(ctrlPts, 1) == 1
