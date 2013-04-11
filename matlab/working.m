@@ -32,11 +32,10 @@ for i = 6 %1:length(Mg.cells)
     for j = 1:thisCell.lastSeen - thisCell.firstSeen
         
         plot(thisCell, j)
-        plot(Mg.frames{j}.bounds{thisCell.obsRefs(j)}, 'r')
+        %         plot(Mg.frames{j}.bounds{thisCell.obsRefs(j)}, 'r')
         
-        pause()
+%         pause()
     end
     
 end
-
 
