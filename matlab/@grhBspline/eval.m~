@@ -9,6 +9,13 @@ function F = eval(obj, ctrlPts, order, s)
     if isa(ctrlPts, 'grhSnake')
         ctrlPts = ctrlPts.ctrlPts;
     end
+    
+    try
+        assert(strcmp(order, 'curve') ...
+            || strcmp(order, 'tangent') ...
+            || strcmp(order, 'normal'))
+    catch
+        display('The only valid eval order options are curve / tang
 
     % make sure control points are correct size column vector
     assert(length(ctrlPts)==obj.L)
@@ -19,9 +26,9 @@ function F = eval(obj, ctrlPts, order, s)
     % default number of evaluation points
     divs = 100*obj.L;
     
-    if nargin = 4
+    if nargin == 4
         if s >= 0
-            % single user defined 
+            % single user defined evaluation point
             % find which span is needed
             k = floor(s);
             k = obj.bsig(k+1);
@@ -50,7 +57,7 @@ function F = eval(obj, ctrlPts, order, s)
     
     % evaluation of entire range    
     s = linspace(0, obj.L, divs);
-    F = zeros(divs,1);
+    F = zeros(divs-1,1);
     ind = 1;
     for k = 1:obj.L
         temp = s(s>=k-1 & s<k)-k+1;
@@ -73,10 +80,7 @@ function F = eval(obj, ctrlPts, order, s)
         F(ind:ind+Ntemp-1)    = temp;
         ind = ind + Ntemp;
     end
-    if strcmp(order, 'curve'), F(end) = F(1); end
-    else
 
-    end
     if strcmp(order, 'normal')
-    F = 1i * F;
+        F = 1i * F;
     end

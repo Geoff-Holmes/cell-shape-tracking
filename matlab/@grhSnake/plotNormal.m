@@ -1,4 +1,4 @@
-function plotNormal(obj, s, divs)
+function plotNormal(obj, s)
 
 switch nargin
     case 1
