@@ -62,10 +62,10 @@ for k = 2:obj.DataL
     newBoundI = sparse([imag(newBound); imag(p0)], [real(newBound); real(p0)],...
         [ones(length(newBound), 1); 0]);
    
-    figure; imshow(full(newBoundI))
-    hold; plot(p0, 'g+')
-    
-    pause()
+%     figure; imshow(full(newBoundI))
+%     hold; plot(p0, 'g+')
+%     
+%     pause()
     
     % get gradient of normal
     m = imag(nrm0)/real(nrm0);
@@ -101,22 +101,19 @@ for k = 2:obj.DataL
             newP(findCount) = p0 - deltax * [1; 1i];
         end  
     end
-     
-    findCount
-    newP
-    ind2 = find(newBound==newP(1));
 
+    ind2 = find(newBound==newP(1));
     
-            
-    
+    newBound = circshift(newBound, ind2-1);
+   
     % construct C matrix
-    C = obj.Bspline.getCmatrix(obj.frames{k}.bounds{ind});
+    C = obj.Bspline.getCmatrix(newBound);
     
 %     Xnew = Filter(X0, Cov, Obs, ObsMat)
     [Xnew, ~, Qnew] = ...
         obj.Model.Filter(obj.cells{iCell}.snake(k-1).ctrlPts, ...
         obj.cells{iCell}.covariance{k-1}, ...
-        obj.frames{k}.bounds{ind}, C);
+        newBound, C);
     
     % add properties of the new observation to this cell
     obj.cells{iCell}.addObservation...
