@@ -1,4 +1,4 @@
-function F = curve(obj, ctrlPts, s, divs)
+function F = curve(obj, ctrlPts, s)
 %
 %     F = curve(obj, ctrlPts, s, divs)
 %
@@ -13,6 +13,4 @@ function F = curve(obj, ctrlPts, s, divs)
             F = eval(obj, ctrlPts, 'curve');
         case 3
             F = eval(obj, ctrlPts, 'curve', s);
-        case 4
-            F = eval(obj, ctrlPts, 'curve', s, divs);
     end

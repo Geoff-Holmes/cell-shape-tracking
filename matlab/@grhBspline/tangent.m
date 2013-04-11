@@ -1,4 +1,4 @@
-function F = tangent(obj, ctrlPts, s, divs)
+function F = tangent(obj, ctrlPts, s)
 %
 %     F = tangent(obj, ctrlPts, s, divs)
 %
@@ -13,6 +13,4 @@ function F = tangent(obj, ctrlPts, s, divs)
             F = eval(obj, ctrlPts, 'tangent');
         case 3
             F = eval(obj, ctrlPts, 'tangent', s);
-        case 4
-            F = eval(obj, ctrlPts, 'tangent', s, divs);
     end

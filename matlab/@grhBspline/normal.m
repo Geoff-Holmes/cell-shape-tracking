@@ -1,4 +1,4 @@
-function F = normal(obj, ctrlPts, s, divs)
+function F = normal(obj, ctrlPts, s)
 %
 %     F = normal(obj, ctrlPts, s, divs)
 %
@@ -13,6 +13,4 @@ function F = normal(obj, ctrlPts, s, divs)
             F = eval(obj, ctrlPts, 'normal');
         case 3
             F = eval(obj, ctrlPts, 'normal', s);
-        case 4
-            F = eval(obj, ctrlPts, 'normal', s, divs);
     end

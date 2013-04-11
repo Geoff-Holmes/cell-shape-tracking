@@ -21,7 +21,7 @@ function F = eval(obj, ctrlPts, order, s)
     
     if nargin = 4
         if s >= 0
-            % single user defined evaluation point
+            % single user defined 
             % find which span is needed
             k = floor(s);
             k = obj.bsig(k+1);
@@ -73,7 +73,10 @@ function F = eval(obj, ctrlPts, order, s)
         F(ind:ind+Ntemp-1)    = temp;
         ind = ind + Ntemp;
     end
+    if strcmp(order, 'curve'), F(end) = F(1); end
+    else
 
+    end
     if strcmp(order, 'normal')
-        F = 1i * F;
+    F = 1i * F;
     end

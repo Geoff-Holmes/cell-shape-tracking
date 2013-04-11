@@ -1,8 +1,6 @@
-function F = curve(obj, s, divs)
+function F = curve(obj, s)
 
 switch nargin
-    case 3
-        F = obj.Bspline.eval(obj.ctrlPts, 'curve', s, divs);
     case 2
         F = obj.Bspline.eval(obj.ctrlPts, 'curve', s);
     case 1

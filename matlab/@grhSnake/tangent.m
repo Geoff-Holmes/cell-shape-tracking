@@ -1,8 +1,6 @@
-function F = tangent(obj, s, divs)
+function F = tangent(obj, s)
 
 switch nargin
-    case 3
-        F = obj.Bspline.eval(obj.ctrlPts, 'tangent', s, divs);
     case 2
         F = obj.Bspline.eval(obj.ctrlPts, 'tangent', s);
     case 1
