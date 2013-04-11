@@ -1,11 +1,10 @@
 function F = tangent(obj, s, divs)
 
-if nargin > 2
-    F = obj.Bspline.tangent(obj.ctrlPts, s, divs);
-else
-    if nargin > 1
-        F = obj.Bspline.tangent(obj.ctrlPts, s);
-    else
-        F = obj.Bspline.tangent(obj.ctrlPts);
-    end
+switch nargin
+    case 3
+        F = obj.Bspline.eval(obj.ctrlPts, 'tangent', s, divs);
+    case 2
+        F = obj.Bspline.eval(obj.ctrlPts, 'tangent', s);
+    case 1
+        F = obj.Bspline.eval(obj.ctrlPts, 'tangent');
 end

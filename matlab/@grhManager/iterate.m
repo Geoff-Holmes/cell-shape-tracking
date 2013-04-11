@@ -44,10 +44,15 @@ for k = 2:obj.DataL
     centroidShift = obj.frames{k}.centroids(ind) ...
         - obj.cells{iCell}.getCentroid(k-1);
     
-    % get normal to previous position at start of curve
+    % get start point of previous boundary
+    p0 = obj.cells{iCell}.snake(k-1).curve(0)
+    
+    % get normal at start of previous boundary
     % in complex normal is i * tangent
     nrm0 = 1i * obj.cells{iCell}.snake(k-1).tangent(0);
     nrm0 = nrm0 / abs(nrm0);
+    
+    
     
     
     % construct C matrix
