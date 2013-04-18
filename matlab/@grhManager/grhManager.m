@@ -1,4 +1,4 @@
-classdef grhManager
+classdef grhManager < handle
     
     properties
         Bspline;

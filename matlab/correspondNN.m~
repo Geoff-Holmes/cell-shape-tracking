@@ -1,13 +1,12 @@
-function [C, T0, N0] = correspondNN(A, B, thresh, type)
+function [C, newCellIDs] = correspondNN(A, B, thresh, type)
 
-% [C, T0, N0] = correspondNN(A, B, thresh)
+% [C, newCellIDs] = correspondNN(A, B, thresh)
 %
 % inputs are two vectors A, B of cell centroid positions in complex form
 % also thresh is maximum distance a cell can move
 
 % output is a correspondence vector C
-% tracks T0 with no new observation allocated
-% new observations N0 not allocated to any track
+% newCellIDs for obs not associated with any track
 %
 % eg C = [2 3 1] means that the cell corresponding to row 1 in A
 % corresponds to that in row 2 of B
@@ -24,7 +23,7 @@ D = abs(dist(A', B));
 dummy = max(max(D)) + 1;
 XX = D;
 
-if nargin < 4, type == 1; end
+if nargin < 4, type = 1; end
 switch type
     case 1
         % allocate new obs to tracks starting with the smallest possible cell jump
@@ -60,10 +59,11 @@ switch type
         end
     otherwise
         display('Invalid NN type')
+        T0 = A;
+        N0 = B;
         return
 end
 
-% also return unallocated tracks and obs
-T0 = A(~L1);
-N0 = B(~L2);
+% also return unallocated obs
+newCellIDs = B(~L2);
 

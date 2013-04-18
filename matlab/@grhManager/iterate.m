@@ -29,12 +29,9 @@ for k = 2:obj.DataL
     end
     
     % get correspondence vector according to chosen option 1 / 2
-    [Crspnd, endedTrackPts, newCellPts] = obj.corresponder(...
+    [Crspnd, newCells] = obj.corresponder(...
         liveCentroids, obj.frames{k}.centroids, 40, 1);
-    
-    liveTracks
-    liveCentroids
-    Crspnd
+
     assert(NliveTracks == length(Crspnd));
     
     % loop over live tracks
@@ -44,6 +41,7 @@ for k = 2:obj.DataL
             flagTracksLive(iCell) = 0;
         else
             
+            % get 'correct' cyclic permutation of new boundary obs 
             [newBound, centroidShift] ...
                 = obj.getNewObsBoundary(k, iCell, Crspnd);
    
@@ -62,6 +60,7 @@ for k = 2:obj.DataL
         end
     end
     
+    % tidy up for tracks that have ended
     liveTracks = liveTracks(find(flagTracksLive));
     liveCentroids = liveCentroids(find(flagTracksLive));
 end

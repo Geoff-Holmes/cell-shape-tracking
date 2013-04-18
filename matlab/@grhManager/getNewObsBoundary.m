@@ -1,6 +1,10 @@
 function [newBound, centroidShift] ...
     = getNewObsBoundary(obj, k, iCell, Crspnd)
 
+% get appropriate start point of new observation boundary
+% currently uses first cross point of pos or neg normal from old boundary
+% superimposed on new shape using the net centroid shift
+
 % get net movement of cell centroid
 centroidShift = obj.frames{k}.centroids(Crspnd(iCell)) ...
     - obj.cells{iCell}.getCentroid(k-1);

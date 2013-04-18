@@ -1,13 +1,12 @@
-function [C, T0, N0] = correspondNN(A, B, thresh, type)
+function [C, newCellIDs] = correspondNN(A, B, thresh, type)
 
-% [C, T0, N0] = correspondNN(A, B, thresh)
+% [C, newCellIDs] = correspondNN(A, B, thresh)
 %
 % inputs are two vectors A, B of cell centroid positions in complex form
 % also thresh is maximum distance a cell can move
 
 % output is a correspondence vector C
-% tracks T0 with no new observation allocated
-% new observations N0 not allocated to any track
+% newCellIDs for obs not associated with any track
 %
 % eg C = [2 3 1] means that the cell corresponding to row 1 in A
 % corresponds to that in row 2 of B
@@ -15,7 +14,7 @@ function [C, T0, N0] = correspondNN(A, B, thresh, type)
 % initiliaze
 C = zeros(1,length(A));  % correspondence vector
 % set up flags, 1 if ...
-L1 = C;                  % tracks that have received new obs;
+% L1 = C;                  % tracks that have received new obs;
 L2 = zeros(1,length(B)); % new obs have been allocated
 
 % get distances of all possible position jumps last frame to this
@@ -37,7 +36,7 @@ switch type
             % if allowed make the allocation
             if m<=thresh, 
                 C(i)  = j; 
-                L1(i) = 1;
+%                 L1(i) = 1;
                 L2(j) = 1;
             end
             % dummy out rows / cols that have been taken care of
@@ -54,7 +53,7 @@ switch type
             % if allowed make the allocation
             if m<=thresh, 
                 C(i)  = j; 
-                L1(i) = 1;
+%                 L1(i) = 1;
                 L2(j) = 1;
             end
         end
@@ -65,7 +64,6 @@ switch type
         return
 end
 
-% also return unallocated tracks and obs
-T0 = A(~L1);
-N0 = B(~L2);
+% also return unallocated obs
+newCellIDs = find(~L2);
 
