@@ -5,10 +5,11 @@ classdef grhCell < handle
         id;
         firstSeen;
         lastSeen;
-        snake;       % list 
-        covariance;  % list
-        centroid;    % list
-        obsRefs;     % list of observations allocated to this cell
+        snake;          % list 
+        covariance;     % list
+        centroid;       % list
+        obsRefs;        % list of observations allocated to this cell
+        centroidShift;  %list
         Bspline;
         
         
@@ -26,6 +27,7 @@ classdef grhCell < handle
             obj.covariance{1} = covariance;
             obj.centroid(1) = centroid;
             obj.obsRefs(1) = obsRefs;
+            obj.centroidShift(1) = 0;
         end
         
     end

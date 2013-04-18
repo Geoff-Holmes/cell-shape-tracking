@@ -20,7 +20,7 @@ cc = 1;
 for i = 1:obj.L
     
     % get the points corresponding to pixels of this span
-    s = S(S >= i-1 & S < i);
+    s = S(S >= i-1 & S < i) - (i-1);
     % each point has its own row in the C matrix
     NnewRows = length(s);
     % calculate rows of C

@@ -12,5 +12,5 @@ end
 % attach cells to manager
 obj.cells = Cells;
 
-% initiate live track list
-obj.liveTracks = 1:obj.frames{1}.cellCount;
+% initiate total track count
+obj.Ntracks = obj.frames{1}.cellCount;

@@ -1,7 +1,9 @@
-#:!usr/bin/python     ################# check %self.L  should it be @=%self.Nb etc ?????
+#:!usr/bin/python     
 
 # breaks down for multiple knots when d>3
 # breaks down when d = 10  presumably need further copies of self.knots or something
+
+# geoff.r.holmes@sheffield.ac.uk
 
 import numpy as np
 import pylab as pb

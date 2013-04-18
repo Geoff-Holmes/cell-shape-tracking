@@ -1,5 +1,6 @@
 classdef grhModel
-
+    %    obj = grhModel(A, C, W, v)
+    %
     % Create Model object for kalman filtering / smoothing
     %    Model:
     %     X(t+1) = AX(t) + w, w~N(0,W),

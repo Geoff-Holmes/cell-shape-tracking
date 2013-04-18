@@ -1,5 +1,6 @@
-clear all
-close all
+function Mg = working(iCell)
+
+if nargin == 0, iCell = 6; end
 
 % initialise spline
 B = grhBspline();
@@ -11,20 +12,20 @@ data = 'neutroImages_Phil_XYpoint7';
 % M = grhModel(eye(2*B.L), zeros(1,2*B.L), 10*eye(2*B.L), 2);
 
 % Random walk model
-M = grhModel(eye(B.L), zeros(1,B.L), 10*eye(B.L), 2);
+M = grhModel(eye(B.L), zeros(1,B.L), 10*eye(B.L), 20);
 
 H = grhImageHandler(0,45);
 
-Mg = grhManager(B, M, H, data);
+Mg = grhManager(B, M, H, @correspondNN, data);
 clear B M H data
 
 Mg = Mg.firstFrame();
 
 figure; hold on
 
-for i = 6 %1:length(Mg.cells)
+for i = iCell %1:length(Mg.cells)
     
-    CellNo = i
+    display (['Processing cell ' num2str(i)])
     Mg = Mg.iterate(i);
     
     thisCell = Mg.cells{i}

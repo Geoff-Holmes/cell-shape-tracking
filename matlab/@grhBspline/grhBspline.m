@@ -1,6 +1,14 @@
 classdef grhBspline < handle
     
     % periodic Bspline function
+    % B = grhBspline()
+    % B = grhBspline(L, d)
+    %
+    % B = grhBspline()
+    % creates a Bspline object with 20 spans and dimension 4
+    %
+    % B = grhBspline(L, d)
+    % to specify L spans and dimension d
     
     properties
         

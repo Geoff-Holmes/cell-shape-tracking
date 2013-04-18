@@ -1,4 +1,4 @@
-function plot(obj, colour)
+function p = plot(obj, colour)
 
 if nargin ==1, colour = 'b'; end
 
@@ -7,4 +7,4 @@ F = obj.Bspline.curve(obj.ctrlPts);
 % close the curve
 F(end+1) = F(1);
 
-plot(F, colour)
+p = plot(F, colour);

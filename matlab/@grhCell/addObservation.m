@@ -1,4 +1,5 @@
-function obj = addObservation(obj, ctrlPts, covariance, centroid, obsRefs)
+function obj = addObservation...
+    (obj, ctrlPts, covariance, centroid, obsRefs, centroidShift)
 
 %     Add observation event to cell
 
@@ -9,3 +10,4 @@ obj.snake(end+1) = grhSnake(ctrlPts, obj.Bspline);
 obj.covariance{end+1} = covariance;
 obj.centroid(end+1) = centroid;
 obj.obsRefs(end+1) = obsRefs;
+obj.centroidShift(end+1) = centroidShift;
