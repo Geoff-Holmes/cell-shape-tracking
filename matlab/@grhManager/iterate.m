@@ -29,7 +29,7 @@ for k = 2:obj.DataL
     end
     
     % get correspondence vector according to chosen option 1 / 2
-    [Crspnd, newCells] = obj.corresponder(...
+    [Crspnd, newCellsIDs] = obj.corresponder(...
         liveCentroids, obj.frames{k}.centroids, 40, 1);
 
     assert(NliveTracks == length(Crspnd));
@@ -63,4 +63,5 @@ for k = 2:obj.DataL
     % tidy up for tracks that have ended
     liveTracks = liveTracks(find(flagTracksLive));
     liveCentroids = liveCentroids(find(flagTracksLive));
+    obj = addNewCells(obj, k, obj.frames{k}, newCellIDs);
 end

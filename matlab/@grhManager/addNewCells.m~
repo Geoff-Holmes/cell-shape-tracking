@@ -1,0 +1,16 @@
+function obj = addNewCells(obj, Tframe, thisFrameObs, newCellObsIDs)
+    
+
+for i = 1:length(newCellObs)
+    ctrlPts = obj.Bspline.dataFit(newCellObs(i));
+    % create cell object for each observed cell
+    Cells{i} = ...
+        grhCell(obj.Ntracks + i, t, obj.Bspline, ...
+        ctrlPts, eye(obj.Bspline.L), obj.frames{t}.centroids(i), i);
+end
+
+% attach cells to manager
+obj.cells = Cells;
+
+% initiate total track count
+obj.Ntracks = obj.frames{1}.cellCount;
