@@ -1,16 +1,19 @@
 function [newBound, centroidShift] ...
-    = getNewObsBoundary(obj, k, iCell, Crspnd)
+    = getNewObsBoundary(obj, k, old, new)
 
 % get appropriate start point of new observation boundary
 % currently uses first cross point of pos or neg normal from old boundary
 % superimposed on new shape using the net centroid shift
 
 % get net movement of cell centroid
-centroidShift = obj.frames{k}.centroids(Crspnd(iCell)) ...
-    - obj.cells{iCell}.getCentroid(k-1);
-
+try
+centroidShift = obj.frames{k}.centroids(new) ...
+    - obj.cells{old}.getCentroidT(k-1);
+catch exCallcellsgetCentroid
+    exCallcellsgetCentroid
+end
 % get start point of previous boundary
-p0 = obj.cells{iCell}.snake(k-1).curve(0);
+p0 = obj.cells{old}.getSnakeT(k-1).curve(0);
 
 % move start point with cell to new cell position in order to map
 % boundary starting points
@@ -18,12 +21,12 @@ p0 = round(p0 + centroidShift);
 
 % get normal at start of previous boundary
 % in complex normal is i * tangent
-nrm0 = obj.cells{iCell}.snake(k-1).normal(0);
+nrm0 = obj.cells{old}.getSnakeT(k-1).normal(0);
 %     nrm0 = nrm0 / abs(nrm0);
 %     obj.cells{iCell}.snake(k-1).plotNormal(0);
 
 % prepare new obs boundary for searching
-newBound = obj.frames{k}.bounds{Crspnd(iCell)};
+newBound = obj.frames{k}.bounds{new};
 newBoundI = sparse([imag(newBound); imag(p0)], [real(newBound); ...
     real(p0)], [ones(length(newBound), 1); 0]);
 

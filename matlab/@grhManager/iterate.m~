@@ -12,7 +12,7 @@ function obj = iterate(obj, iCell, plt)
     liveCentroids = obj.frames{1}.centroids;
 
 for k = 2:obj.DataL
-    k
+%     k
     
     % get number of live tracks
     NliveTracks = length(liveTracks);
@@ -29,39 +29,56 @@ for k = 2:obj.DataL
     end
     
     % get correspondence vector according to chosen option 1 / 2
-    [Crspnd, newCellsIDs] = obj.corresponder(...
-        liveCentroids, obj.frames{k}.centroids, 40, 1);
+    [Crspnd, newCellInds] = obj.corresponder(...
+        liveCentroids, obj.frames{k}.centroids, 25, 1);
 
+    try
     assert(NliveTracks == length(Crspnd));
+    catch exAssert
+    end
     
     % loop over live tracks
     for iCell = 1:NliveTracks
         
         if Crspnd(iCell) == 0 % track has ended
+%             liveTracks(iCell)
             flagTracksLive(iCell) = 0;
         else
-            
+            try
             % get 'correct' cyclic permutation of new boundary obs 
             [newBound, centroidShift] ...
-                = obj.getNewObsBoundary(k, iCell, Crspnd);
-   
+                = obj.getNewObsBoundary(k, liveTracks(iCell), Crspnd(iCell));
+            catch exCallGetNewObsBoundary
+                exCallGetNewObsBoundary
+            end
             % construct C matrix
             C = obj.Bspline.getCmatrix(newBound);
 
         %     Xnew = Filter(X0, Cov, Obs, ObsMat)
             [Xnew, ~, Qnew] = ...
-                obj.Model.Filter(obj.cells{iCell}.snake(k-1).ctrlPts, ...
-                obj.cells{iCell}.covariance{k-1}, ...
+                obj.Model.Filter(obj.cells{liveTracks(iCell)}.getSnakeT(k-1).ctrlPts, ...
+                obj.cells{liveTracks(iCell)}.getCovarT(k-1), ...
                 newBound, C);
 
             % add properties of the new observation to this cell
-            obj.cells{iCell}.addObservation...
-                (Xnew, Qnew, obj.frames{k}.centroids(Crspnd(iCell)), Crspnd(iCell), centroidShift);
+            obj.cells{liveTracks(iCell)}.addObservation...
+                (Xnew, Qnew, obj.frames{k}.centroids(Crspnd(iCell)), ...
+                Crspnd(iCell), centroidShift);
         end
     end
     
     % tidy up for tracks that have ended
     liveTracks = liveTracks(find(flagTracksLive));
     liveCentroids = liveCentroids(find(flagTracksLive));
-    obj = addNewCells(obj, obj.frames{k}.bounds{newCellIDs});
+    
+    % create new cells / tracks for unallocated observations
+    if length(newCellInds)
+%         newCellInds
+        [obj, newCellIDs] = addNewCells(obj, k, obj.frames{k}, newCellInds);
+%         newCellIDs
+        liveTracks = [liveTracks newCellIDs];
+        liveCentroids = [liveCentroids obj.frames{k}.centroids(newCellInds)];
+    end
+    
+    
 end

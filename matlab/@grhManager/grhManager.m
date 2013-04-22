@@ -11,7 +11,6 @@ classdef grhManager < handle
         maxMoveThresh = 30;
         
         frames;
-        centroidDistances;
         cells;
         Ntracks;
         
