@@ -7,8 +7,7 @@ classdef grhManager < handle
         corresponder; % function handle
         Data;
         DataL;
-        
-        maxMoveThresh = 30;
+        maxMoveThresh;
         
         frames;
         cells;
@@ -18,13 +17,15 @@ classdef grhManager < handle
         
     methods
         
-        function obj = grhManager(...
-                Bspline, Model, ImageHandler, corresponder, Data)
+        function obj ...
+                = grhManager(Bspline, Model, ImageHandler, ...
+                corresponder, maxMoveThresh, Data)
             
             obj.Bspline = Bspline;
             obj.Model = Model;
             obj.ImageHandler = ImageHandler;
             obj.corresponder = corresponder;
+            obj.maxMoveThresh = maxMoveThresh;
             % load and unpack data
             temp = load(Data);
             tempField = fieldnames(temp);

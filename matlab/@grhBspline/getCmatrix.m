@@ -1,4 +1,4 @@
-function C = getCmatrix(obj, boundary)
+function C = getCmatrix(obj, boundary, Sdim)
 
 % get observation matrix which reconstructs observation from control points
 % that are yet to be determined
@@ -11,7 +11,7 @@ S = S(1:end-1);
 % get powers for spline evaluation
 p = 0:obj.d-1;
 % intialise C matrix
-C = zeros(nB, obj.L);
+C = zeros(nB, Sdim);
 
 % counter for first row of next block of C to update
 cc = 1;
@@ -26,9 +26,11 @@ for i = 1:obj.L
     % calculate rows of C
     [pwr, s] = meshgrid(p, s);
     s = s .^ pwr;
-    C(cc:cc+NnewRows-1, :) = s * obj.BSG{i};
+    C(cc:cc+NnewRows-1, 1:obj.L) = s * obj.BSG{i};
     % update row pointer
     cc = cc + NnewRows;
     
 end
+
+C = sparse(C);
     

@@ -12,8 +12,9 @@ function obj = iterate(obj, iCell, plt)
     liveCentroids = obj.frames{1}.centroids;
 
 for k = 2:obj.DataL
-%     k
-    
+%     pause()
+    k
+        
     % get number of live tracks
     NliveTracks = length(liveTracks);
     
@@ -30,12 +31,13 @@ for k = 2:obj.DataL
     
     % get correspondence vector according to chosen option 1 / 2
     [Crspnd, newCellInds] = obj.corresponder(...
-        liveCentroids, obj.frames{k}.centroids, 25, 1);
+        liveCentroids, obj.frames{k}.centroids, obj.maxMoveThresh, 1);
 
     try
     assert(NliveTracks == length(Crspnd));
     catch exAssert
     end
+    
     
     % loop over live tracks
     for iCell = 1:NliveTracks
@@ -52,18 +54,30 @@ for k = 2:obj.DataL
                 exCallGetNewObsBoundary
             end
             % construct C matrix
-            C = obj.Bspline.getCmatrix(newBound);
+            C = obj.Bspline.getCmatrix(newBound, obj.Model.Sdim);
+            
+            % construct current state augmented with velocities if needed
+            currentState = zeros(obj.Model.Sdim, 1);
+            currentState(1:obj.Bspline.L) ...
+                = obj.cells{liveTracks(iCell)}.getSnakeT(k-1).ctrlPts;
+            if obj.Model.Sdim > obj.Bspline.L
+                currentState(obj.Bspline.L+1:obj.Model.Sdim) ...
+                    = obj.cells{liveTracks(iCell)}.getCtrlVelsT(k-1);
+            end   
 
         %     Xnew = Filter(X0, Cov, Obs, ObsMat)
             [Xnew, ~, Qnew] = ...
-                obj.Model.Filter(obj.cells{liveTracks(iCell)}.getSnakeT(k-1).ctrlPts, ...
+                obj.Model.Filter(currentState, ...
                 obj.cells{liveTracks(iCell)}.getCovarT(k-1), ...
                 newBound, C);
 
             % add properties of the new observation to this cell
             obj.cells{liveTracks(iCell)}.addObservation...
-                (Xnew, Qnew, obj.frames{k}.centroids(Crspnd(iCell)), ...
-                Crspnd(iCell), centroidShift);
+                (Xnew(1:obj.Bspline.L), Qnew, ...
+                obj.frames{k}.centroids(Crspnd(iCell)), ...
+                Crspnd(iCell), centroidShift, ...
+                Xnew(obj.Bspline.L+1:obj.Model.Sdim), ...
+                C(:, 1:obj.Bspline.L));
         end
     end
     

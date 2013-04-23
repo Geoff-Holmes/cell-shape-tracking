@@ -1,5 +1,5 @@
 function obj = addObservation...
-    (obj, ctrlPts, covariance, centroid, obsRefs, centroidShift)
+    (obj, ctrlPts, covariance, centroid, obsRefs, centroidShift, ctrlVelocities, Cmatrix)
 
 %     Add observation event to cell
 
@@ -11,3 +11,5 @@ obj.covariance{end+1} = covariance;
 obj.centroid(end+1) = centroid;
 obj.obsRefs(end+1) = obsRefs;
 obj.centroidShift(end+1) = centroidShift;
+obj.ctrlVelocities{end+1} = ctrlVelocities;
+obj.Cmatrix{end+1} = Cmatrix;

@@ -30,7 +30,7 @@ classdef grhModel
             nC = size(C);
             nW = size(W);
             assert(sum(nA==nW)==size(nA,2));
-            assert(nA(1) == nC(2));
+%             assert(nA(1) == nC(2));
             if numel(v) > 1, v = v(1); end
             obj.A = A;
             obj.C = C;
