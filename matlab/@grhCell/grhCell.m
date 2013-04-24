@@ -6,7 +6,7 @@ classdef grhCell < handle
         firstSeen;
         lastSeen;
         snake;          % list 
-        ctrlVelocities  % cell
+        states;         % cell
         Cmatrix         % cell
         covariance;     % cell
         centroid;       % list
@@ -20,7 +20,7 @@ classdef grhCell < handle
     methods
         
         function obj = grhCell(id, firstSeen, Bspline, ctrlPts, ...
-                covariance, centroid, obsRefs, ctrlVelocities)
+                covariance, centroid, obsRefs, states)
             
             obj. id = id;
             obj.firstSeen = firstSeen;
@@ -32,9 +32,10 @@ classdef grhCell < handle
             obj.obsRefs(1) = obsRefs;
             obj.centroidShift(1) = 0;
             if nargin == 7
-                ctrlVelocities = zeros(obj.Bspline.L, 1);
+                obj.states = zeros(obj.Bspline.L, 1);
+            else
+                obj.states{1} = states;
             end
-            obj.ctrlVelocities{1} = ctrlVelocities;
             obj.Cmatrix{1} = [];
         end
         

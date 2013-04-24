@@ -31,7 +31,7 @@ for k = 2:obj.DataL
     
     % get correspondence vector according to chosen option 1 / 2
     [Crspnd, newCellInds] = obj.corresponder(...
-        liveCentroids, obj.frames{k}.centroids, 25, 1);
+        liveCentroids, obj.frames{k}.centroids, obj.maxMoveThresh, 1);
 
     try
     assert(NliveTracks == length(Crspnd));
@@ -56,16 +56,18 @@ for k = 2:obj.DataL
             % construct C matrix
             C = obj.Bspline.getCmatrix(newBound, obj.Model.Sdim);
             
-            currentState = zeros(obj.Model.Sdim, 1);
-            currentState(1:obj.Bspline.L) = obj.cells{liveTracks(iCell)}.getSnakeT(k-1).ctrlPts;
-            if obj.Model.Sdim > obj.Bspline.L
-                currentState(obj.Bspline.L+1:obj.Model.Sdim) ...
-                    = obj.cells{liveTracks(iCell)}.getCtrlVelsT(k-1);
-            end   
+%             % construct current state augmented with velocities if needed
+%             currentState = zeros(obj.Model.Sdim, 1);
+%             currentState(1:obj.Bspline.L) ...
+%                 = obj.cells{liveTracks(iCell)}.getSnakeT(k-1).ctrlPts;
+%             if obj.Model.Sdim > obj.Bspline.L
+%                 currentState(obj.Bspline.L+1:obj.Model.Sdim) ...
+%                     = obj.cells{liveTracks(iCell)}.getCtrlVelsT(k-1);
+%             end   
 
         %     Xnew = Filter(X0, Cov, Obs, ObsMat)
             [Xnew, ~, Qnew] = ...
-                obj.Model.Filter(currentState, ...
+                obj.Model.Filter(obj.ce, ...
                 obj.cells{liveTracks(iCell)}.getCovarT(k-1), ...
                 newBound, C);
 
@@ -75,7 +77,7 @@ for k = 2:obj.DataL
                 obj.frames{k}.centroids(Crspnd(iCell)), ...
                 Crspnd(iCell), centroidShift, ...
                 Xnew(obj.Bspline.L+1:obj.Model.Sdim), ...
-                C(1:obj.Bspline.L, 1:obj.Bspline.L));
+                C(:, 1:obj.Bspline.L));
         end
     end
     
