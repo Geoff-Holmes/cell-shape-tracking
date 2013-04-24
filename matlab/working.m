@@ -83,7 +83,8 @@ n=1;
 for i = 2:23
 plot(Mg.cells{n}.snake(i))
 C = Mg.cells{n}.Cmatrix{i};
-v = Mg.cells{n}.Cmatrix{i} * Mg.cells{n}.ctrlVelocities{i};
+state = Mg.cells{n}.states{i};
+v = Mg.cells{n}.Cmatrix{i} * state(Mg.Bspline.L+1:end);
 c = Mg.cells{n}.snake(i).curve(-length(v));v = v(1:end-1);
 line(real(conj([c c+v]')), imag(conj([c c+v]')))
 hold on

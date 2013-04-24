@@ -8,7 +8,8 @@ for i = 1:obj.frames{1}.cellCount
     % create cell object for each observed cell
     Cells{i} = grhCell(i, 1, obj.Bspline, ctrlPts, obj.Model.W, ...
         obj.frames{1}.centroids(i), i, ...
-        [ctrlPts; zeros(obj.Bspline.L, 1)], Cmatrix);
+        [ctrlPts; zeros(obj.Bspline.L, 1)],...
+        Cmatrix);
 end
 
 % attach cells to manager

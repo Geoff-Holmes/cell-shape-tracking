@@ -20,7 +20,7 @@ classdef grhCell < handle
     methods
         
         function obj = grhCell(id, firstSeen, Bspline, ctrlPts, ...
-                covariance, centroid, obsRefs, states)
+                covariance, centroid, obsRefs, states, Cmatrix)
             
             obj. id = id;
             obj.firstSeen = firstSeen;
@@ -31,12 +31,8 @@ classdef grhCell < handle
             obj.centroid(1) = centroid;
             obj.obsRefs(1) = obsRefs;
             obj.centroidShift(1) = 0;
-            if nargin == 7
-                obj.states = zeros(obj.Bspline.L, 1);
-            else
-                obj.states{1} = states;
-            end
-            obj.Cmatrix{1} = [];
+            obj.states{1} = states;
+            obj.Cmatrix{1} = Cmatrix;
         end
         
     end

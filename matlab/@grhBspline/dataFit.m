@@ -1,4 +1,4 @@
-function [ctrlPts, snake] =  dataFit(obj, data, plt)
+function [ctrlPts, snake, DsnMat] =  dataFit(obj, data, plt)
 
 % ctrlPts          =  dataFit(obj, data)
 % ctrlPts]         =  dataFit(obj, data, plt)
