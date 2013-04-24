@@ -11,9 +11,9 @@ classdef grhCell < handle
         covariance;     % cell
         centroid;       % list
         obsRefs;        % list of observations allocated to this cell
-        centroidShift;  % list
+        centroidShift;  %list
         Bspline;
-        smoothed = 0;   % flag
+        smoothed;       
         
         
     end

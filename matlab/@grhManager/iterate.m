@@ -36,9 +36,9 @@ for k = 2:obj.DataL
     try
     assert(NliveTracks == length(Crspnd));
     catch exAssert
+        exAssert
     end
-    
-    
+
     % loop over live tracks
     for iCell = 1:NliveTracks
         
@@ -56,15 +56,6 @@ for k = 2:obj.DataL
             % construct C matrix
             C = obj.Bspline.getCmatrix(newBound, obj.Model.Sdim);
             
-%             % construct current state augmented with velocities if needed
-%             currentState = zeros(obj.Model.Sdim, 1);
-%             currentState(1:obj.Bspline.L) ...
-%                 = obj.cells{liveTracks(iCell)}.getSnakeT(k-1).ctrlPts;
-%             if obj.Model.Sdim > obj.Bspline.L
-%                 currentState(obj.Bspline.L+1:obj.Model.Sdim) ...
-%                     = obj.cells{liveTracks(iCell)}.getCtrlVelsT(k-1);
-%             end   
-
         %     Xnew = Filter(X0, Cov, Obs, ObsMat)
             [Xnew, ~, Qnew] = ...
                 obj.Model.Filter(obj.cells{liveTracks(iCell)}.getStateT(k-1), ...

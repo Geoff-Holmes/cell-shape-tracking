@@ -30,6 +30,8 @@ for i = 1:nData
     = (sData(i) - brkPts(sig)+1).^(0:obj.d-1) * obj.BS * obj.G(:,:,sig);
 end
 
+DsnMat = sparse(DsnMat);
+
 % get control points via least squares
 ctrlPts = (DsnMat' * DsnMat) \ DsnMat' * data;
 
