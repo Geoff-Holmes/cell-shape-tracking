@@ -1,5 +1,6 @@
 function [X, P, Q, K] = Filter(obj, X0, Q, Y, C)
-    
+
+% [X, P, Q, K] = Filter(obj, X0, Q, Y, C)
 % get filtered state for model in obj
 % X0 is intial state
 % P is predicted covariance
