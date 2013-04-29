@@ -2,7 +2,7 @@ close all
 clear all
 
 % initialise spline
-B = grhBspline(20, 1);
+B = grhBspline();
 
 data = 'neutroImages_Phil_XYpoint7';
 
@@ -41,3 +41,4 @@ Mg = Mg.smoothAllCellStates();
 iCell = 20;
 Mg.showTrack(iCell);
 Mg.showCellBoundaryVelocites(iCell);
+Mg.showAll();
