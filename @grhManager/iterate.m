@@ -13,7 +13,7 @@ function obj = iterate(obj, plt)
     
 %     display(['   Iteration out of ' num2str(obj.DataL) ' :'])
     
-    m = msgBox(['Iteration 1 of ' num2str(obj.DataL)], 'Progress');
+    m = msgbox(['Iteration 1 of ' num2str(obj.DataL)], 'Progress');
     set(findobj(m,'style','pushbutton'),'Visible','off')
     
 for k = 2:obj.DataL
