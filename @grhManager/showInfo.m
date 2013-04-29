@@ -1,6 +1,6 @@
 function showInfo(obj)
 
-if ~obj.info
+if ~isstruct(obj.info)
     obj.getTrackInfo()
 end
 

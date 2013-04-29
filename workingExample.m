@@ -41,5 +41,5 @@ Mg.smoothAllCellStates();
 iCell = 20;
 Mg.showTrack(iCell);
 Mg.showCellBoundaryVelocites(iCell);
-Mg.showAll();
+Mg.showAllTracks();
 Mg.showInfo();
