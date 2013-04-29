@@ -2,25 +2,27 @@ function showTrack(obj, n)
 
 figure(gcf); clf;
 
-if obj.cells{1}.smoothed
-    display('Smoother not yet applied.  Using filtered states'); 
-end
+
 
 if nargin == 2
     
-    C1 = n;
-    C2 = n;
+    C = n;
 else
-    C1 = 1;
-    C2 = length(obj.cells)
+    C = 1:length(obj.cells)
 end
 
-for i = C1:C2
+for i = C
     
     thisCell = obj.cells{i};
-     hold on;
-    
+    hold on;
+
+    if ~thisCell.smoothed
+        display('Smoother not yet applied.  Using filtered states'); 
+    end    
+
     for j = 1:thisCell.lastSeen - thisCell.firstSeen
+        
+
         
         p1 = plot(thisCell, j);
 
