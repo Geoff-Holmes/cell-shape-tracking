@@ -1,6 +1,9 @@
 function obj = firstFrame(obj)
     
-% get observation data from first frame
+% get observation data from first frame and initialise corresponding cell
+% objects using least squares fit to construct Bspline control points from
+% the raw boundaries
+
 obj.frames{1} = obj.ImageHandler.getFrame(obj.Data{1});
 
 for i = 1:obj.frames{1}.cellCount

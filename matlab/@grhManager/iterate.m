@@ -1,8 +1,8 @@
-function obj = iterate(obj, iCell, plt)
+function obj = iterate(obj, plt)
 
 %     iterate through each frame of data from the second onwards and get 
 %     the frame info - cell outlines and centroids
-%     Also track cell iCell from the first frame
+%     Track all lives cells assigning new obs to them as appropriate
 
     if nargin > 2 && plt
         figure; sp1 = subplot(1,2,1); sp2 = subplot(1,2,2);
@@ -10,10 +10,20 @@ function obj = iterate(obj, iCell, plt)
     
     liveTracks    = 1:obj.Ntracks;
     liveCentroids = obj.frames{1}.centroids;
-
+    
+%     display(['   Iteration out of ' num2str(obj.DataL) ' :'])
+    
+    m = msgBox(['Iteration 1 of ' num2str(obj.DataL)], 'Progress');
+    set(findobj(m,'style','pushbutton'),'Visible','off')
+    
 for k = 2:obj.DataL
 %     pause()
-    k
+%     display(num2str(k))
+    
+    set(findobj(m,'Tag','MessageBox'), ...
+        'String', ['   Iteration ' num2str(k) ' of ' num2str(obj.DataL)])
+    drawnow()
+    
         
     % get number of live tracks
     NliveTracks = length(liveTracks);
@@ -83,6 +93,6 @@ for k = 2:obj.DataL
         liveTracks = [liveTracks newCellIDs];
         liveCentroids = [liveCentroids obj.frames{k}.centroids(newCellInds)];
     end
-    
-    
 end
+
+close(m)

@@ -1,5 +1,8 @@
 function [obj, newIDs] ...
     = addNewCells(obj, Tframe, thisFrameObs, newCellObsInds)
+
+% add cells that are considered new (can't be allocated to existing tracks)
+% to the list of cells thus initiating a potential new track
     
 % number of new cells
 Nnew = length(newCellObsInds);

@@ -3,7 +3,7 @@ function [F, s] = eval(obj, ctrlPts, order, s)
 %     [F, s] = eval(obj, ctrlPts, order, s)
 %
 %     evaluate at s the given order of the Bspline weighted by ctrlPts
-%     if s = -1, if at every not point of the Bspline
+%     if s = -1,  at every knot point of the Bspline
 %     if s is any other negative integer evaluation is over entire range 
 %     at -s equally spaced divisions.
 %     order can take the values:
@@ -42,8 +42,9 @@ if nargin == 4
     if s >= 0
         % single user defined evaluation point
         % find which span is needed
-        k = floor(s);
-        k = obj.bsig(k+1);
+        k = floor(s) + 1;
+%         % get index of first active basis function 
+%         k = obj.bsig(k+1);
         % get s above span floor
         s = s - floor(s);
         if strcmp(order, 'curve')
