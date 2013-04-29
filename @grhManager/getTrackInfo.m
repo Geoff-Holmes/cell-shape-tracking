@@ -1,4 +1,4 @@
-function info = getTrackInfo(obj)
+function obj = getTrackInfo(obj)
 
 % get stat info on cell tracks
 
@@ -33,5 +33,13 @@ for i = 1 : obj.Ntracks
     angles(test2) = 0;
     info(i).angles       = angles;
     
+    % get cell areas
+    for j = 1 : Nsteps
+        areas(j) = iCell.snake(j).getArea();
+    end
+    info(i).areas        = areas;
+    
 end
+
+obj.info = info;
 

@@ -11,7 +11,8 @@ classdef grhManager < handle
         
         frames;
         cells;
-        Ntracks;
+        Ntracks = 0;
+        info    = 0;
         
     end
         
@@ -31,7 +32,6 @@ classdef grhManager < handle
             tempField = fieldnames(temp);
             obj.Data = temp.(tempField{1});
             obj.DataL = length(obj.Data);
-            obj.Ntracks = 0;
             
         end
         

@@ -32,9 +32,9 @@ Mg = grhManager(B, M, H, @correspondNN, 75, data);
 clear A B C G H M Q W v dt data
 
 % do the main business
-Mg = Mg.firstFrame();
-Mg = Mg.iterate();
-Mg = Mg.smoothAllCellStates();
+Mg.firstFrame();
+Mg.iterate();
+Mg.smoothAllCellStates();
 
 
 % show some results
@@ -42,3 +42,4 @@ iCell = 20;
 Mg.showTrack(iCell);
 Mg.showCellBoundaryVelocites(iCell);
 Mg.showAll();
+Mg.showInfo();
