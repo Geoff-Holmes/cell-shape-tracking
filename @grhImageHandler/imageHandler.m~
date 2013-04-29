@@ -1,0 +1,33 @@
+classdef imageHandler
+    
+    methods
+        
+        function obj = imageHandler()
+            % construct image handler
+        end
+        
+        function boundaries = getBounds(obj, A)
+            % get all cell boundaries
+            if issparse(A)
+                I = full(I);
+            end
+            A = full(neutroImage);
+            [neutroBoundi,L] = bwboundaries(A,4,'noholes');
+
+            % number of boundaries
+            nB = length(neutroBoundi);
+
+            % find boundary length
+            cc = 0;
+            for k = 1:nB
+                nBi(k) = length(neutroBoundi{k});
+                if nBi(k) > thresh
+                    cc = cc+1;
+                    neutroBound(cc) = neutroBoundi(k);
+                end
+            end
+            
+        end
+        
+    end
+end
