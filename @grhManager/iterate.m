@@ -1,27 +1,33 @@
-function obj = iterate(obj, plt)
+function obj = iterate(obj, stopEarly)
 
 %     iterate through each frame of data from the second onwards and get 
 %     the frame info - cell outlines and centroids
 %     Track all lives cells assigning new obs to them as appropriate
 
-    if nargin > 2 && plt
-        figure; sp1 = subplot(1,2,1); sp2 = subplot(1,2,2);
-    end
+%    if nargin > 2 && plt
+%        figure; sp1 = subplot(1,2,1); sp2 = subplot(1,2,2);
+%    end
+
+if nargin == 2
+    maxIteration = stopEarly;
+else
+    maxIteration = obj.DataL;
+end
     
-    liveTracks    = 1:obj.Ntracks;
-    liveCentroids = obj.frames{1}.centroids;
+liveTracks    = 1:obj.Ntracks;
+liveCentroids = obj.frames{1}.centroids;
     
-%     display(['   Iteration out of ' num2str(obj.DataL) ' :'])
+%     display(['   Iteration out of ' num2str(maxIteration) ' :'])
     
-    m = msgbox(['Iteration 1 of ' num2str(obj.DataL)], 'Progress');
-    set(findobj(m,'style','pushbutton'),'Visible','off')
+m = msgbox(['Iteration 1 of ' num2str(maxIteration)], 'Progress');
+set(findobj(m,'style','pushbutton'),'Visible','off')
     
-for k = 2:obj.DataL
+for k = 2:maxIteration
 %     pause()
 %     display(num2str(k))
     
     set(findobj(m,'Tag','MessageBox'), ...
-        'String', ['   Iteration ' num2str(k) ' of ' num2str(obj.DataL)])
+        'String', ['   Iteration ' num2str(k) ' of ' num2str(maxIteration)])
     drawnow()
     
         
@@ -34,10 +40,10 @@ for k = 2:obj.DataL
     % get observation info from the next frame
     obj.frames{k} = obj.ImageHandler.getFrame(obj.Data{k});
 
-    if nargin > 2 && plt
-        obj.frames{k}.plotBounds(gcf,sp1);
-        obj.frames{k}.plotCentroids(gcf,sp1);
-    end
+%    if nargin > 2 && plt
+%        obj.frames{k}.plotBounds(gcf,sp1);
+%        obj.frames{k}.plotCentroids(gcf,sp1);
+%    end
     
     % get correspondence vector according to chosen option 1 / 2
     [Crspnd, newCellInds] = obj.corresponder(...
