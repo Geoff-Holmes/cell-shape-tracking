@@ -4,47 +4,38 @@ function obj = iterate(obj, stopEarly)
 %     the frame info - cell outlines and centroids
 %     Track all lives cells assigning new obs to them as appropriate
 
-%    if nargin > 2 && plt
-%        figure; sp1 = subplot(1,2,1); sp2 = subplot(1,2,2);
-%    end
-
 if nargin == 2
     maxIteration = stopEarly;
 else
     maxIteration = obj.DataL;
 end
     
+% initialise
 liveTracks    = 1:obj.Ntracks;
 liveCentroids = obj.frames{1}.centroids;
     
 %     display(['   Iteration out of ' num2str(maxIteration) ' :'])
-    
+
+% progress reporter
 m = msgbox(['Iteration 1 of ' num2str(maxIteration)], 'Progress');
 set(findobj(m,'style','pushbutton'),'Visible','off')
     
 for k = 2:maxIteration
-%     pause()
-%     display(num2str(k))
     
+    % progress report
     set(findobj(m,'Tag','MessageBox'), ...
         'String', ['   Iteration ' num2str(k) ' of ' num2str(maxIteration)])
     drawnow()
-    
-        
+            
     % get number of live tracks
     NliveTracks = length(liveTracks);
     
-    % flags for track live on / remove
+    % flags for track to-continue / be-removed
     flagTracksLive = ones(1, NliveTracks);
     
     % get observation info from the next frame
     obj.frames{k} = obj.ImageHandler.getFrame(obj.Data{k});
 
-%    if nargin > 2 && plt
-%        obj.frames{k}.plotBounds(gcf,sp1);
-%        obj.frames{k}.plotCentroids(gcf,sp1);
-%    end
-    
     % get correspondence vector according to chosen option 1 / 2
     [Crspnd, newCellInds] = obj.corresponder(...
         liveCentroids, obj.frames{k}.centroids, obj.maxMoveThresh, 1);
@@ -59,7 +50,7 @@ for k = 2:maxIteration
     for iCell = 1:NliveTracks
         
         if Crspnd(iCell) == 0 % track has ended
-%             liveTracks(iCell)
+            % mark for removal
             flagTracksLive(iCell) = 0;
         else
             try
@@ -69,9 +60,11 @@ for k = 2:maxIteration
             catch exCallGetNewObsBoundary
                 exCallGetNewObsBoundary
             end
-            % construct C matrix
+            
+            % construct time varying observatoin C matrix
             C = obj.Bspline.getCmatrix(newBound, obj.Model.Sdim);
             
+            % apply Kalman filter to get new states
         %     Xnew = Filter(X0, Cov, Obs, ObsMat)
             [Xnew, ~, Qnew] = ...
                 obj.Model.Filter(obj.cells{liveTracks(iCell)}.getStateT(k-1), ...
@@ -87,11 +80,11 @@ for k = 2:maxIteration
         end
     end
     
-    % tidy up for tracks that have ended
+    % tidy up by removing tracks that have ended
     liveTracks = liveTracks(find(flagTracksLive));
     liveCentroids = liveCentroids(find(flagTracksLive));
     
-    % create new cells / tracks for unallocated observations
+    % create new cell-track for each unallocated observations
     if ~isempty(newCellInds)
 %         newCellInds
         [obj, newCellIDs] = addNewCells(obj, k, obj.frames{k}, newCellInds);
