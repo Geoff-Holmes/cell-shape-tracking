@@ -2,8 +2,8 @@ close all
 clear all
 
 % add path to main code and make sure spline matrices are on search path
-addpath('~/Dropbox/shapeTrackingCode/')
-addpath(genpath('~/Dropbox/shapeTrackingCode/functions'))
+addpath('~/Dropbox/cellShapeTracking/')
+addpath(genpath('~/Dropbox/cellShapeTracking/functions'))
 
 % initialise spline
 B = grhBspline();
@@ -35,15 +35,19 @@ v = 5;
 M = grhModel(A, C, W, v);
 
 % construct image handler 
+% obj = grhImageHandler(threshB, threshA)
+% threshB is minimum boundary length
+% threshA is minimum area
 H = grhImageHandler(0,45);
 
 % contruct process manager
+% obj = grhManager(Bspline, Model, ImageHandler, corresponder, maxMoveThresh, Data)
 Mg = grhManager(B, M, H, @correspondNN, 75, data);
 clear A B C G H M Q W v dt data
 
 % do the main business
 Mg.firstFrame();
-Mg.iterate(5);
+Mg.iterate();
 Mg.smoothAllCellStates();
 
 
