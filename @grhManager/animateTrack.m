@@ -1,4 +1,4 @@
-function showTrack(obj, n)
+function animateTrack(obj, n)
 
 figure(gcf); clf;
 
