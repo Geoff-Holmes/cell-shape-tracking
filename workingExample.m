@@ -41,7 +41,7 @@ M = grhModel(A, C, W, v);
 H = grhImageHandler(0,45);
 
 % contruct process manager
-% obj = grhManager(Bspline, Model, ImageHandler, corresponder, maxMoveThresh, Data)
+% grhManager(Bspline, Model, ImageHandler, corresponder, maxMoveThresh, Data)
 Mg = grhManager(B, M, H, @correspondNN, 75, data);
 clear A B C G H M Q W v dt data
 
@@ -53,7 +53,7 @@ Mg.smoothAllCellStates();
 
 % show some results
 % iCell = 20;
-% Mg.showTrack(iCell);
+% Mg.animateTrack(iCell);
 % Mg.showCellBoundaryVelocites(iCell);
 % Mg.showAllTracks();
 % Mg.showInfo();
