@@ -44,8 +44,8 @@ Mg.smoothAllCellStates();
 
 
 % show some results
-iCell = 20;
-Mg.showTrack(iCell);
-Mg.showCellBoundaryVelocites(iCell);
-Mg.showAllTracks();
-Mg.showInfo();
+% iCell = 20;
+% Mg.showTrack(iCell);
+% Mg.showCellBoundaryVelocites(iCell);
+% Mg.showAllTracks();
+% Mg.showInfo();
