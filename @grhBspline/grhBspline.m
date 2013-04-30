@@ -36,7 +36,7 @@ classdef grhBspline < handle
             % load correct spline matrix
 %             fl = ['_d' num2str(obj.d) '_L' num2str(obj.L) '_prdc'];
             fl = ['_d' num2str(obj.d) '_prdc'];
-            temp   = load(['@grhBspline/splineMatrices/BS' fl]);
+            temp   = load(['functions/splineMatrices/BS' fl]);
             obj.BS = temp.BS;
             % determine which basis is first for each span
             obj.bsig = [(obj.L-obj.d+2):obj.L 1:(obj.L-obj.d+1)];

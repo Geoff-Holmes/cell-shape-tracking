@@ -1,6 +1,10 @@
 close all
 clear all
 
+% add path to main code and make sure spline matrices are on search path
+addpath('~/Dropbox/shapeTrackingCode/')
+addpath(genpath('~/Dropbox/shapeTrackingCode/functions'))
+
 % initialise spline
 B = grhBspline();
 
