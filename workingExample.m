@@ -1,5 +1,4 @@
-close all
-clear all
+function workingExample()
 
 % add path to main code and make sure spline matrices are on search path
 addpath('~/Dropbox/cellShapeTracking/')
@@ -47,7 +46,7 @@ clear A B C G H M Q W v dt data
 
 % do the main business
 Mg.firstFrame();
-Mg.iterate();
+Mg.iterate(5);
 Mg.smoothAllCellStates();
 
 
@@ -56,4 +55,5 @@ Mg.smoothAllCellStates();
 % Mg.animateTrack(iCell);
 % Mg.showCellBoundaryVelocites(iCell);
 % Mg.showAllTracks();
-% Mg.showInfo();
+% Mg.showIn% [enoughSteps, enoughDistance, enoughBoth] = ...
+%     showInfo(obj, opts, minSteps, minDist)
