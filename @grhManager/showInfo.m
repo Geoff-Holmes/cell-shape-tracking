@@ -1,4 +1,22 @@
-function showInfo(obj, opts)
+function [enoughSteps, enoughDistance, enoughBoth] = ...
+    showInfo(obj, opts, minSteps, minDist)
+
+% [enoughSteps, enoughDistance, enoughBoth] = ...
+%     showInfo(obj, opts, minSteps, minDist)
+%
+% Inputs:
+%   opts is a string containing a comination of '1234'. Include:
+%       1 to show number of steps and net distance by cell
+%       2 to show jump length distributions
+%       3 to show turn angle distributions
+%       4 to show cell area distributions
+%   minSteps and MinDist are thresholds above which a track is considere
+%   'good' for further analysis
+%   CAUTION: it is possible that a cell is actively migrating and yet has
+%   near zero net migration
+%
+%   Outputs:
+%       indices of tracks which are above the respective thresholds or both
 
 if ~isstruct(obj.info)
     obj.getTrackInfo()
@@ -7,20 +25,50 @@ end
 if nargin == 1
     opts = '1234';
 end
+if nargin < 4
+    minSteps = 10;
+    minDist  = 30;
+end
 
 N = length(obj.info);
 iCells = 1:N;
 
-if length(strfind(opts, '1'))
+if length(strfind(opts, '1')) || nargout
+    
+    Nsteps = [obj.info(:).Nsteps];
+    netD   = [obj.info(:).netDistance];
+    
     figure;
-    subplot(2,1,1)
-    bar(iCells, [obj.info(:).Nsteps])
+    set(gcf,'units','normalized','outerposition',[0 0 1 1])
+    subplot(2,1,1); hold on;
+    b1 = bar(iCells, Nsteps);
+    % draw threshold line
+    l1 = grhCline(0+minSteps*1i, N+minSteps*1i);
+    set(l1, 'color', 'k');
     set(gca, 'Xtick', iCells)
+    xlim([0 N+1])
     title('number of observations by track')
-    subplot(2,1,2)
-    bar(iCells, [obj.info(:).netDistance])
+    
+    subplot(2,1,2); hold on;
+    b2 = bar(iCells, netD);
+    % draw threshold line
+    l2 = grhCline(0+minDist*1i, N+minDist*1i);
+    set(l2, 'color', 'k');
     set(gca, 'Xtick', iCells)
+    xlim([0 N+1])
     title('net migration by track')
+    
+    % pick out best tracks
+    test1 = Nsteps > minSteps;
+    test2 = netD   > minDist;
+    ind1  = test1 & test2;   % above both thresholds
+    ind2  = test1 & ~test2;  % above step but not distance  
+    ind3  = test2 & ~test1;  % above distance but not step
+    b1bars = get(b1, 'children');
+    b2bars = get(b2, 'children');
+    set(b1bars, 'Cdata', 3*ind1 + 2*ind2)
+    set(b2bars, 'Cdata', 3*ind1 + 1*ind3)
+
 end
 
 % get a good subplot setup
@@ -31,13 +79,16 @@ opt3 = length(strfind(opts, '3'));
 opt4 = length(strfind(opts, '4'));
 
 if opt2
-    f2 = figure(); suptitle('jump distributions')
+    f2 = figure('units','normalized','outerposition',[0 0 1 1]);
+    suptitle('jump distributions')
 end
 if opt3
-    f3 = figure(); suptitle('turn angle distributions')
+    f3 = figure('units','normalized','outerposition',[0 0 1 1]); 
+    suptitle('turn angle distributions')
 end
 if opt4
-    f4 = figure(); suptitle('cell area distributions')
+    f4 = figure('units','normalized','outerposition',[0 0 1 1]); 
+    suptitle('cell area distributions')
 end
 
 % bin edges for angle histogram
@@ -47,14 +98,14 @@ for i = iCells
     
     if opt2
         % jumps
-        figure(f2)
+        set(0, 'currentfigure', f2)
         subplot(r, c, i)
         hist(obj.info(i).jumps)
         title(['cell ' num2str(i)])
     end
     if opt3
         % turn angles
-        figure(f3)
+        set(0, 'currentfigure', f3)
         subplot(r, c, i)
         n = histc(obj.info(i).angles, angleX);
         bar(angleX, n);
