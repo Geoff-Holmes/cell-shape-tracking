@@ -1,8 +1,24 @@
-function obj = getTrackInfo(obj)
+function [obj,  enoughBoth, enoughSteps, enoughDist] ...
+    = getTrackInfo(obj, angleJumpThresh, minSteps, minDist)
 
 % get stat info on cell tracks
+%   Inputs:
+%       minSteps and MinDist are thresholds above which a track is considere
+%      'good' for further analysis
+%       CAUTION: it is possible that a cell is actively migrating and yet has
+%       near zero net migration
+%
+%   Outputs:
+%       indices of tracks which are above the respective thresholds
 
-angleJumpThresh = 5;
+if nargin < 2
+    angleJumpThresh = 5;
+end
+if nargin < 4
+        minSteps = 10;
+        minDist  = 30;
+end
+
 display(['Angles only calculated where cell moves more than' ...
     num2str(angleJumpThresh) ' units'])
 
@@ -43,3 +59,15 @@ end
 
 obj.info = info;
 
+Nsteps = [obj.info(:).Nsteps];
+netD   = [obj.info(:).netDistance];
+% test for thresholds
+test1 = Nsteps > minSteps;
+test2 = netD   > minDist;
+
+if nargout > 1
+    iCells = 1:obj.Ntracks;
+    enoughBoth  = iCells(test1 & test2);
+    enoughSteps = iCells(test1);
+    enoughDist  = iCells(test2);
+end

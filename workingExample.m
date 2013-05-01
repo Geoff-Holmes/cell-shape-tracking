@@ -49,6 +49,7 @@ Mg.firstFrame();
 Mg.iterate(5);
 Mg.smoothAllCellStates();
 
+longTracks = Mg.showInfo('1')
 
 % show some results
 % iCell = 20;

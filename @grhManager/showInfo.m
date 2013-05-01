@@ -1,5 +1,5 @@
 function [enoughBoth, enoughSteps, enoughDist] = ...
-    showInfo(obj, opts, minSteps, minDist)
+    showInfo(obj, opts, minSteps, minDist, angleJumpThresh)
 
 % [enoughSteps, enoughDistance, enoughBoth] = ...
 %     showInfo(obj, opts, minSteps, minDist)
@@ -18,18 +18,23 @@ function [enoughBoth, enoughSteps, enoughDist] = ...
 %   Outputs:
 %       indices of tracks which are above the respective thresholds or both
 
-if ~isstruct(obj.info)
-    obj.getTrackInfo()
-end
-
-if nargin == 1
+if nargin < 2
     opts = '1234';
 end
-if nargin < 4
+if nargin < 3
     minSteps = 10;
+end
+if nargin < 4
     minDist  = 30;
 end
+if nargin < 5
+    angleJumpThresh = 5;
+end
 
+if ~isstruct(obj.info)
+    obj.getTrackInfo(angleJumpThresh, minSteps, minDist)
+end
+    
 N = length(obj.info);
 iCells = 1:N;
 
