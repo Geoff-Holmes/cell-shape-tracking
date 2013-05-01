@@ -1,6 +1,6 @@
 function showCellCtrlPtVels(obj, n)
 
-nCell = obj.cells{n};
+nCell = obj.cells(n);
 
 if ~nCell.smoothed
     display('Smoother not yet applied.  Showed filtered velocities'); 

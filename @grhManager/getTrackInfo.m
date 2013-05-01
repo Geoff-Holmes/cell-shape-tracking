@@ -24,7 +24,7 @@ display(['Angles only calculated where cell moves more than' ...
 
 for i = 1 : obj.Ntracks
     
-    iCell = obj.cells{i};
+    iCell = obj.cells(i);
     
     % number of timepoints covered by track
     Nsteps               = length(iCell.states);

@@ -14,8 +14,6 @@ end
 liveTracks    = 1:obj.Ntracks;
 liveCentroids = obj.frames{1}.centroids;
     
-%     display(['   Iteration out of ' num2str(maxIteration) ' :'])
-
 % progress reporter
 m = msgbox(['Iteration 1 of ' num2str(maxIteration)], 'Progress');
 set(findobj(m,'style','pushbutton'),'Visible','off')
@@ -53,13 +51,9 @@ for k = 2:maxIteration
             % mark for removal
             flagTracksLive(iCell) = 0;
         else
-            try
             % get 'correct' cyclic permutation of new boundary obs 
             [newBound, centroidShift] ...
                 = obj.getNewObsBoundary(k, liveTracks(iCell), Crspnd(iCell));
-            catch exCallGetNewObsBoundary
-                exCallGetNewObsBoundary
-            end
             
             % construct time varying observatoin C matrix
             C = obj.Bspline.getCmatrix(newBound, obj.Model.Sdim);
@@ -67,12 +61,12 @@ for k = 2:maxIteration
             % apply Kalman filter to get new states
         %     Xnew = Filter(X0, Cov, Obs, ObsMat)
             [Xnew, ~, Qnew] = ...
-                obj.Model.Filter(obj.cells{liveTracks(iCell)}.getStateT(k-1), ...
-                obj.cells{liveTracks(iCell)}.getCovarT(k-1), ...
+                obj.Model.Filter(obj.cells(liveTracks(iCell)).getStateT(k-1), ...
+                obj.cells(liveTracks(iCell)).getCovarT(k-1), ...
                 newBound, C);
 
             % add properties of the new observation to this cell
-            obj.cells{liveTracks(iCell)}.addObservation...
+            obj.cells(liveTracks(iCell)).addObservation...
                 (Xnew(1:obj.Bspline.L), Qnew, ...
                 obj.frames{k}.centroids(Crspnd(iCell)), ...
                 Crspnd(iCell), centroidShift, ...

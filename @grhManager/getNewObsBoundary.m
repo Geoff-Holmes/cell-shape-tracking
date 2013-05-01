@@ -8,12 +8,12 @@ function [newBound, centroidShift] ...
 % get net movement of cell centroid
 try
 centroidShift = obj.frames{k}.centroids(new) ...
-    - obj.cells{old}.getCentroidT(k-1);
+    - obj.cells(old).getCentroidT(k-1);
 catch exCallcellsgetCentroid
     exCallcellsgetCentroid
 end
 % get start point of previous boundary
-p0 = obj.cells{old}.getSnakeT(k-1).curve(0);
+p0 = obj.cells(old).getSnakeT(k-1).curve(0);
 
 % move start point with cell to new cell position in order to map
 % boundary starting points
@@ -21,7 +21,7 @@ p0 = round(p0 + centroidShift);
 
 % get normal at start of previous boundary
 % in complex normal is i * tangent
-nrm0 = obj.cells{old}.getSnakeT(k-1).normal(0);
+nrm0 = obj.cells(old).getSnakeT(k-1).normal(0);
 %     nrm0 = nrm0 / abs(nrm0);
 %     obj.cells{iCell}.snake(k-1).plotNormal(0);
 

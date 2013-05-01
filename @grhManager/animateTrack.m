@@ -13,7 +13,7 @@ end
 
 for i = C
     
-    thisCell = obj.cells{i};
+    thisCell = obj.cells(i);
     hold on;
 
     if ~thisCell.smoothed

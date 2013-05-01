@@ -6,7 +6,7 @@ for t = 1:length(obj.frames)
     
     for j = 1:length(obj.cells)
         
-        thisCell = obj.cells{j};
+        thisCell = obj.cells(j);
         
         if ~thisCell.smoothed && flag
             flag = 0;

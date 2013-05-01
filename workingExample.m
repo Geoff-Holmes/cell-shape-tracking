@@ -46,15 +46,15 @@ clear A B C G H M Q W v dt data
 
 % do the main business
 Mg.firstFrame();
-Mg.iterate(5);
+Mg.iterate(25);
 Mg.smoothAllCellStates();
 
 longTracks = Mg.showInfo('1')
 
 % show some results
-% iCell = 20;
-% Mg.animateTrack(iCell);
+for iCell = longTracks
+    Mg.animateTrack(iCell);
+end
 % Mg.showCellBoundaryVelocites(iCell);
 % Mg.showAllTracks();
-% Mg.showIn% [enoughSteps, enoughDistance, enoughBoth] = ...
-%     showInfo(obj, opts, minSteps, minDist)
+

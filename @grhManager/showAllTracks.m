@@ -10,7 +10,7 @@ cInd = floor(linspace(1, length(cMap), length(obj.cells)));
 
 for j = 1:length(obj.cells)
 
-    thisCell = obj.cells{j};
+    thisCell = obj.cells(j);
 
     if ~thisCell.smoothed && flag
         flag = 0;
