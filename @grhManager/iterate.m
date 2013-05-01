@@ -18,7 +18,7 @@ liveCentroids = obj.frames{1}.centroids;
 m = msgbox(['Iteration 1 of ' num2str(maxIteration)], 'Progress');
 set(findobj(m,'style','pushbutton'),'Visible','off')
 
-try
+% try % catch any errors to make sure msgbox closes
     
 for k = 2:maxIteration
     
@@ -57,7 +57,7 @@ for k = 2:maxIteration
             [newBound, centroidShift] ...
                 = obj.getNewObsBoundary(k, liveTracks(iCell), Crspnd(iCell));
             
-            % construct time varying observatoin C matrix
+            % construct time varying observation C matrix
             C = obj.Bspline.getCmatrix(newBound, obj.Model.Sdim);
             
             % apply Kalman filter to get new states
@@ -69,10 +69,8 @@ for k = 2:maxIteration
 
             % add properties of the new observation to this cell
             obj.cells(liveTracks(iCell)).addObservation...
-                (Xnew(1:obj.Bspline.L), Qnew, ...
-                obj.frames{k}.centroids(Crspnd(iCell)), ...
-                Crspnd(iCell), centroidShift, ...
-                Xnew, C(:, 1:obj.Bspline.L));
+                (Xnew, Qnew, obj.frames{k}.centroids(Crspnd(iCell)), ...
+                Crspnd(iCell), centroidShift, C(:, 1:obj.Bspline.L));
         end
     end
     
@@ -90,10 +88,11 @@ for k = 2:maxIteration
     end
 end
 
-catch mainLoopError
-    mainLoopError
-    close(m)
-    throwEx
-end
+% catch mainLoopError
+%     disp(mainLoopError)
+%     disp(mainLoopError.stack)
+%     close(m)
+%     throwEx
+% end
 
 close(m)
