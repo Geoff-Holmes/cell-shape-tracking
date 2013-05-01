@@ -1,4 +1,4 @@
-function [enoughSteps, enoughDistance, enoughBoth] = ...
+function [enoughBoth, enoughSteps, enoughDist] = ...
     showInfo(obj, opts, minSteps, minDist)
 
 % [enoughSteps, enoughDistance, enoughBoth] = ...
@@ -69,6 +69,12 @@ if length(strfind(opts, '1')) || nargout
     set(b1bars, 'Cdata', 3*ind1 + 2*ind2)
     set(b2bars, 'Cdata', 3*ind1 + 1*ind3)
 
+end
+
+if nargout
+    enoughBoth  = ind1;
+    enoughSteps = ind2;
+    enoughDist  = ind3;
 end
 
 % get a good subplot setup
