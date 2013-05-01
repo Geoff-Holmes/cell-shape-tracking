@@ -82,8 +82,8 @@ end
 
 if nargout
     enoughBoth  = iCells(ind1);
-    enoughSteps = iCells(ind2);
-    enoughDist  = iCells(ind3);
+    enoughSteps = iCells(test1);
+    enoughDist  = iCells(test2);
 end
 
 % get a good subplot setup
