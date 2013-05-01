@@ -17,6 +17,8 @@ liveCentroids = obj.frames{1}.centroids;
 % progress reporter
 m = msgbox(['Iteration 1 of ' num2str(maxIteration)], 'Progress');
 set(findobj(m,'style','pushbutton'),'Visible','off')
+
+try
     
 for k = 2:maxIteration
     
@@ -86,6 +88,12 @@ for k = 2:maxIteration
         liveTracks = [liveTracks newCellIDs];
         liveCentroids = [liveCentroids obj.frames{k}.centroids(newCellInds)];
     end
+end
+
+catch mainLoopError
+    mainLoopError
+    close(m)
+    throwEx
 end
 
 close(m)
