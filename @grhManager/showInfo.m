@@ -47,6 +47,8 @@ if length(strfind(opts, '1')) || nargout
     set(l1, 'color', 'k');
     set(gca, 'Xtick', iCells)
     xlim([0 N+1])
+    xlabel('track number')
+    ylabel('number of steps')
     title('number of observations by track')
     
     subplot(2,1,2); hold on;
@@ -56,6 +58,8 @@ if length(strfind(opts, '1')) || nargout
     set(l2, 'color', 'k');
     set(gca, 'Xtick', iCells)
     xlim([0 N+1])
+    xlabel('track number')
+    ylabel('net distance migrated')
     title('net migration by track')
     
     % pick out best tracks
