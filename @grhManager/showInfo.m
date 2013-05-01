@@ -72,9 +72,9 @@ if length(strfind(opts, '1')) || nargout
 end
 
 if nargout
-    enoughBoth  = ind1;
-    enoughSteps = ind2;
-    enoughDist  = ind3;
+    enoughBoth  = iCells(ind1);
+    enoughSteps = iCells(ind2);
+    enoughDist  = iCells(ind3);
 end
 
 % get a good subplot setup
