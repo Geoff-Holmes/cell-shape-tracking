@@ -3,6 +3,7 @@ function obj = iterate(obj, stopEarly)
 %     iterate through each frame of data from the second onwards and get 
 %     the frame info - cell outlines and centroids
 %     Track all lives cells assigning new obs to them as appropriate
+%     stopEarly forces a max number of iterations during debugging
 
 if nargin == 2
     maxIteration = stopEarly;
