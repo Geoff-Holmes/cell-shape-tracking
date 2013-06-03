@@ -7,7 +7,7 @@ addpath(genpath('~/Dropbox/cellShapeTracking/functions'))
 % initialise spline
 B = grhBspline();
 
-data = 'neutroImages_Phil_XYpoint7';
+data = 'neutroImages_hiRes';
 
 % for random walk model
 % A = sparse(eye(B.L));
@@ -41,7 +41,7 @@ H = grhImageHandler(0,45);
 
 % contruct process manager
 % grhManager(Bspline, Model, ImageHandler, corresponder, maxMoveThresh, Data)
-Mg = grhManager(B, M, H, @correspondNN, 75, data);
+Mg = grhManager(B, M, H, @correspondAuction, 2000, data);
 clear A B C G H M Q W v dt data
 
 % do the main business

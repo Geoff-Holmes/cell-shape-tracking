@@ -14,5 +14,5 @@ function plotBounds(obj, iCell, fig, sp)
             plot(obj.bounds{i});
         end
     else
-        plot(obj.bound{iCell})
+        plot(obj.bounds{iCell})
 end
