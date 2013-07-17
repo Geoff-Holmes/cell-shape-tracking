@@ -3,6 +3,7 @@ function Mg = workingExample()
 % add path to main code and make sure spline matrices are on search path
 addpath('~/Dropbox/cellShapeTracking/')
 addpath(genpath('~/Dropbox/cellShapeTracking/functions'))
+%
 
 % initialise spline
 B = grhBspline();
