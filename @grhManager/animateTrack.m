@@ -2,8 +2,6 @@ function animateTrack(obj, n)
 
 figure(gcf); clf;
 
-
-
 if nargin == 2
     
     C = n;
@@ -34,7 +32,8 @@ for i = C
         end
         c = 10*round(thisCell.centroid(1)/10);
         text(real(c), imag(c)+50, num2str(i))
-        title(['Cell ' num2str(i)]); axis([200 1100 550 950]);
+        title(['Cell ' num2str(i)]); 
+        axis([0 1040 0 1040]);
         pause(0.05)
         hold off
     end

@@ -52,6 +52,8 @@ Mg.smoothAllCellStates();
 longTracks = Mg.showInfo('1')
 
 % show some results
+figure
+axis([0 1040 0 1040])
 for iCell = longTracks
     Mg.animateTrack(iCell);
 end
