@@ -14,7 +14,8 @@ for t = 1:length(obj.frames)
         end
         if thisCell.firstSeen <= t && thisCell.lastSeen >= t
             p(j) = plot(thisCell, t-thisCell.firstSeen+1);
-            axis([0 1040 0 1040]); hold on
+            axis([0 obj.DataXYlims(1) 0 obj.DataXYlims(2)]);
+            hold on
         end
     end
     pause(0.01)
