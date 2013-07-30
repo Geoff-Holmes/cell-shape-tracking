@@ -7,6 +7,7 @@ classdef grhManager < handle
         corresponder; % function handle
         Data;
         DataL;
+        DataXYlims;
         maxMoveThresh;
         
         frames;
@@ -32,6 +33,7 @@ classdef grhManager < handle
             tempField = fieldnames(temp);
             obj.Data = temp.(tempField{1});
             obj.DataL = length(obj.Data);
+            obj.DataXYlims = size(obj.Data{1});
             
         end
         

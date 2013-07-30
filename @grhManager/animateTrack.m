@@ -33,7 +33,7 @@ for i = C
         c = 10*round(thisCell.centroid(1)/10);
         text(real(c), imag(c)+50, num2str(i))
         title(['Cell ' num2str(i)]); 
-        axis([0 1040 0 1040]);
+        axis([0 obj.DataXYlims(1) 0 obj.DataXYlims(2)]);
         pause(0.05)
         hold off
     end
