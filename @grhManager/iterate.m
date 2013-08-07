@@ -19,7 +19,7 @@ liveCentroids = obj.frames{1}.centroids;
 m = msgbox(['Iteration 1 of ' num2str(maxIteration)], 'Progress');
 set(findobj(m,'style','pushbutton'),'Visible','off')
 
-% try % catch any errors to make sure msgbox closes
+cleaner = onCleanup(@() close(m));
     
 for k = 2:maxIteration
     
@@ -88,12 +88,3 @@ for k = 2:maxIteration
         liveCentroids = [liveCentroids obj.frames{k}.centroids(newCellInds)];
     end
 end
-
-% catch mainLoopError
-%     disp(mainLoopError)
-%     disp(mainLoopError.stack)
-%     close(m)
-%     throwEx
-% end
-
-close(m)
