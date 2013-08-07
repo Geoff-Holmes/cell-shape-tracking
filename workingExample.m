@@ -1,4 +1,4 @@
-function Mg = workingExample(framesToProcess)
+function [Mg, longTracks] = workingExample(framesToProcess)
 
 % add path to main code and make sure spline matrices are on search path
 addpath('~/Dropbox/cellShapeTracking/')
@@ -23,7 +23,7 @@ data = 'neutroImages_hiRes';
 % W = sparse(10*eye(2*B.L));
 % v = 5;
 
-% % for constant velocity model
+% for constant velocity model
 dt = 1;
 % state update matrix
 A = sparse([eye(B.L) dt*eye(B.L); zeros(B.L) eye(B.L)]);
@@ -31,7 +31,8 @@ A = sparse([eye(B.L) dt*eye(B.L); zeros(B.L) eye(B.L)]);
 C = []; 
 % some correlation between states
 % but what about correlation between velocities and positions
-Q = 10*sparse(toeplitz([2 1 zeros(1, B.L-3) 1]));
+% Q = 10*sparse(toeplitz([2 1 zeros(1, B.L-3) 1]));
+Q = eye(B.L);
 % see Bar-Shalom Estimation with Appln to Tracking ... (2001) p218
 G = sparse([dt^2/2*eye(B.L); dt*eye(B.L)]);
 W = G * Q * G';
@@ -49,7 +50,7 @@ H = grhImageHandler(0,45);
 
 % contruct process manager
 % grhManager(Bspline, Model, ImageHandler, corresponder, maxMoveThresh, Data)
-Mg = grhManager(B, M, H, @correspondAuction, 2000, data);
+Mg = grhManager(B, M, H, @correspondAuction, 200, data);
 clear A B C G H M Q W v dt data
 
 % do the main business
@@ -61,7 +62,7 @@ else
 end
 Mg.smoothAllCellStates();
 
-% longTracks = Mg.showInfo('1')
+longTracks = Mg.showInfo('1')
 
 % show some results
 % figure
