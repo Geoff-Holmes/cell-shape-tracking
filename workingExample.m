@@ -54,7 +54,11 @@ clear A B C G H M Q W v dt data
 
 % do the main business
 Mg.firstFrame();
-Mg.iterate(framesToProcess);
+if nargin
+    Mg.iterate(framesToProcess);
+else
+    Mg.iterate();
+end
 Mg.smoothAllCellStates();
 
 % longTracks = Mg.showInfo('1')
