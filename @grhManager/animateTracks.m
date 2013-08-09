@@ -40,10 +40,13 @@ for t = startFrame:endFrame
     
     if option
         subplot(1,2,2), hold off;
+        title('Shape space')
+        hold on;
         subplot(1,2,1);
     end
     hold off
     imshow(double(~obj.Data{t}) + .9*double(~~obj.Data{t}));
+    title('Coordinate space')
     hold on
     
     for j = 1:length(tracks)
@@ -72,13 +75,12 @@ for t = startFrame:endFrame
                     q(j) = plot(plotData(1), plotData(2), 'o');
                 end
                 set(q(j), 'color', cMap(cInd(j),:));
-                hold on
                 axis(obj.shapeDescriptorLims(1:end))
                 axis square
             end
         end
     end
-    title(['Frame : ' num2str(t)])
+    suptitle(['Frame : ' num2str(t)])
 %     hold off
     % give option to pause between frames
     if s ==1 && t == 1

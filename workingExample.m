@@ -8,7 +8,7 @@ addpath(genpath('~/Dropbox/CSTdevelopment/functions'))
 % initialise spline
 B = grhBspline();
 
-data = 'neutroImages_hiRes';
+dataName = 'neutroImages_hiRes';
 
 % for random walk model
 % A = sparse(eye(B.L));
@@ -50,7 +50,7 @@ H = grhImageHandler(0,45);
 
 % contruct process manager
 % grhManager(Bspline, Model, ImageHandler, corresponder, maxMoveThresh, Data)
-Mg = grhManager(B, M, H, @correspondAuction, 200, data);
+Mg = grhManager(B, M, H, @correspondAuction, 200, dataName);
 clear A B C G H M Q W v dt data
 
 % do the main business
