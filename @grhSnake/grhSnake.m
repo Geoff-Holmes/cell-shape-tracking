@@ -4,6 +4,7 @@ classdef grhSnake
         
         ctrlPts;
         Bspline;
+        shapeDescriptor;
         
     end
     

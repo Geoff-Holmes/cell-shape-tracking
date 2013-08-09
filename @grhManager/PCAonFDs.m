@@ -1,32 +1,34 @@
-function PC = PCAonFDs(obj, Npcs)
+function [PC, info] = PCAonFDs(obj, Npcs, Npoints)
 
 % use Principal component analysis to reduce dimension of Fourier
 % Descriptors
 % Npcs optionally set number of PCs to use
 
-if nargin == 1
+if nargin < 2
     Npcs = 3;
+end
+if nargin < 3
+    Npoints = 33;
 end
 
 % get FDs
-FD = obj.getAllFourierDescriptors;
+FD = obj.getAllFourierDescriptors(Npoints);
 % get number of FDs
 N = size(FD, 1);
-% lose track / frame info
+% separate track / frame info
+info = FD(:, 1:2);
 FD = FD(:, 3:end);
-% get mean and replicate
-mnFD = repmat(mean(FD), N, 1);
 % subtract mean
-FD = FD - mnFD;
+FD = bsxfun(@minus, FD, mean(FD));
 % get eigenvectors and eigenvalues
-[A, l] = eig(cov(FD));
+[A, l] = eig(FD'*FD);
+
+% sort by eigenvalues
+[~, ind] = sort(diag(l));
+ind = wrev(ind);
+% and choose eigenvecs corresponding to Npcs largest
+A = A(:, ind(1:Npcs));
 
 % project onto chosen number of principal components
-for i = 1:Npcs
-    % extract eigenvector as row and replicate
-    iEvec = repmat(A(:, end-i+1)', N, 1);
-    % project all data onto this eigenvector
-    PC(:,i) = sum(FD .* iEvec, 2);
-end
-    
+PC = FD * A;
     
