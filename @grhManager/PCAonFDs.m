@@ -32,3 +32,12 @@ A = A(:, ind(1:Npcs));
 % project onto chosen number of principal components
 PC = FD * A;
     
+figure; hold on;
+for i = unique(info(:,1))'
+    data = PC(info(:,1)==i, :);
+try
+    plot(data(:,1), data(:,2), data(:,3))
+catch
+    plot(data(:,1), data(:,2))
+end
+end

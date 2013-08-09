@@ -1,11 +1,19 @@
-function animateTracks(obj, tracks)
+function animateTracks(obj, tracks, option)
 
 % animate trajectory for cell/track IDs specified as list in tracks
 % if no list specified show all tracks
 
 % check whether a subset of tracks is specified
-if nargin == 1
+if nargin == 1 || strcmp(tracks, 'all')
     tracks = 1:length(obj.cells);
+end
+if nargin < 3
+    option = 0;
+end
+
+% get shape descriptor data if needed
+if option && ~length(obj.shapeDescriptorLims)
+    obj.storeShapeDescriptors;
 end
 
 f = figure;
@@ -24,17 +32,23 @@ cInd = cInd(randperm(length(cInd)));
 % get start and end time for these tracks
 startFrame = min([obj.cells(tracks).firstSeen]);
 endFrame   = max([obj.cells(tracks).lastSeen]);
-    
+
+ 
 % loop for repeating option
 for s = 1:10
 for t = startFrame:endFrame
     
-    
+    if option
+        subplot(1,2,2), hold off;
+        subplot(1,2,1);
+    end
+    hold off
     imshow(double(~obj.Data{t}) + .9*double(~~obj.Data{t}));
     hold on
     
     for j = 1:length(tracks)
         
+        if option, subplot(1,2,1); end
         thisCell = obj.cells(tracks(j));
         
         if ~thisCell.smoothed && flag
@@ -49,11 +63,23 @@ for t = startFrame:endFrame
             c = 10*round(thisCell.centroid(t-thisCell.firstSeen+1)/10);
             txt(j) = text(real(c), imag(c)+50, num2str(tracks(j)));
             set(txt(j), 'color', cMap(cInd(j),:));
-%             hold on
+            if option
+                subplot(1,2,2)
+                plotData = thisCell.snake(t-thisCell.firstSeen+1).shapeDescriptor;
+                try
+                    q(j) = plot3(plotData(1), plotData(2), plotData(3), 'o');
+                catch ex
+                    q(j) = plot(plotData(1), plotData(2), 'o');
+                end
+                set(q(j), 'color', cMap(cInd(j),:));
+                hold on
+                axis(obj.shapeDescriptorLims(1:end))
+                axis square
+            end
         end
     end
     title(['Frame : ' num2str(t)])
-    hold off
+%     hold off
     % give option to pause between frames
     if s ==1 && t == 1
         button = questdlg('', 'Play mode', 'Continuous', ...

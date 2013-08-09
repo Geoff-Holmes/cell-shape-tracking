@@ -14,6 +14,7 @@ classdef grhManager < handle
         cells;
         Ntracks = 0;
         info    = 0;
+        shapeDescriptorLims;
         
     end
         

@@ -10,11 +10,13 @@ if strcmp(SDtype, 'PCAonFD')
    
     prompt = {'How many shape boundary points?', 'How many PCA components?'};
     ans = inputdlg(prompt, 'Input', 1, {'33', '3'});
-    Npoints = str2num(ans{1})
+    Npoints = str2num(ans{1});
     Npcs = str2num(ans{2});
     
     
     [PC, info] = obj.PCAonFDs(Npcs, Npoints);
+    % store limits of shape space
+    obj.shapeDescriptorLims = [min(PC); max(PC)];
     
     assert(size(PC,1)==size(info,1))
     for i = 1:length(PC)

@@ -8,7 +8,7 @@ function frame = getFrame(obj, A)
     concomp = regionprops(B, 'centroid', 'PixelIdxList', 'Area');
     A = zeros(size(A));
     cc = 0;
-    for i = 1:length(concomp)
+    for i = 1 :length(concomp)
         temp = concomp(i);
         if temp.Area > obj.minAreaThresh
             % reconstruct binary image for boundary finding
