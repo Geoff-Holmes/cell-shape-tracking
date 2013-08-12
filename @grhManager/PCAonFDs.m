@@ -1,8 +1,13 @@
 function [PC, info] = PCAonFDs(obj, Npcs, Npoints)
 
+% [PC, info] = PCAonFDs(obj, Npcs, Npoints)
+%
 % use Principal component analysis to reduce dimension of Fourier
 % Descriptors
 % Npcs optionally set number of PCs to use
+% Npoints sets numbers of points around shape boundaries
+% PC is principal components of the shape data
+% info contains track and track frame number
 
 if nargin < 2
     Npcs = 3;
@@ -26,6 +31,8 @@ FD = bsxfun(@minus, FD, mean(FD));
 % sort by eigenvalues
 [~, ind] = sort(diag(l));
 ind = wrev(ind);
+% output
+Eigenvalues = num2str(round((wrev(sort(diag(l)))))')
 % and choose eigenvecs corresponding to Npcs largest
 A = A(:, ind(1:Npcs));
 
@@ -36,8 +43,9 @@ figure; hold on;
 for i = unique(info(:,1))'
     data = PC(info(:,1)==i, :);
 try
-    plot(data(:,1), data(:,2), data(:,3))
+    plot3(data(:,1), data(:,2), data(:,3))
 catch
     plot(data(:,1), data(:,2))
 end
 end
+title('Cell tracks in shape space')

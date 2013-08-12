@@ -1,7 +1,10 @@
 function animateTracks(obj, tracks, option)
 
+% animateTracks(obj, tracks, option)
+%
 % animate trajectory for cell/track IDs specified as list in tracks
 % if no list specified show all tracks
+% if option is true tracks in shape space will also be shown.
 
 % check whether a subset of tracks is specified
 if nargin == 1 || strcmp(tracks, 'all')
@@ -69,11 +72,13 @@ for t = startFrame:endFrame
             if option
                 subplot(1,2,2)
                 plotData = thisCell.snake(t-thisCell.firstSeen+1).shapeDescriptor;
+%                 plot(plotData)
                 try
                     q(j) = plot3(plotData(1), plotData(2), plotData(3), 'o');
                 catch ex
-                    q(j) = plot(plotData(1), plotData(2), 'o');
+                    q(j) = plot(plotData(1)+10, plotData(2)+10, 'o');
                 end
+                qxt(j) = text(plotData(1), plotData(2), num2str(tracks(j)));
                 set(q(j), 'color', cMap(cInd(j),:));
                 axis(obj.shapeDescriptorLims(1:end))
                 axis square

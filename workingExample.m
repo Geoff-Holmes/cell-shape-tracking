@@ -8,7 +8,8 @@ addpath(genpath('~/Dropbox/CSTdevelopment/functions'))
 % initialise spline
 B = grhBspline();
 
-dataName = 'neutroImages_hiRes';
+% dataName = 'neutroImages_hiRes';
+dataName = 'testData';
 
 % for random walk model
 % A = sparse(eye(B.L));
@@ -16,28 +17,28 @@ dataName = 'neutroImages_hiRes';
 % W = sparse(10*eye(B.L));
 % v = 5;
 
-% for random walk model with velocity estimation
-dt = 1;
-A = sparse([eye(B.L) dt*eye(B.L); zeros(B.L) zeros(B.L)]);
-C = [];
-W = sparse(10*eye(2*B.L));
-v = 5;
-
-% % for constant velocity model
+% % for random walk model with velocity estimation
 % dt = 1;
-% % state update matrix
-% A = sparse([eye(B.L) dt*eye(B.L); zeros(B.L) eye(B.L)]);
-% % observation matrix empty since time varying and evaluated each time
-% C = []; 
-% % some correlation between states
-% % but what about correlation between velocities and positions
-% % Q = 10*sparse(toeplitz([2 1 zeros(1, B.L-3) 1]));
-% Q = eye(B.L);
-% % see Bar-Shalom Estimation with Appln to Tracking ... (2001) p218
-% G = sparse([dt^2/2*eye(B.L); dt*eye(B.L)]);
-% W = G * Q * G';
-% % observation noise level
+% A = sparse([eye(B.L) dt*eye(B.L); zeros(B.L) zeros(B.L)]);
+% C = [];
+% W = sparse(10*eye(2*B.L));
 % v = 5;
+
+% for constant velocity model
+dt = 1;
+% state update matrix
+A = sparse([eye(B.L) dt*eye(B.L); zeros(B.L) eye(B.L)]);
+% observation matrix empty since time varying and evaluated each time
+C = []; 
+% some correlation between states
+% but what about correlation between velocities and positions
+% Q = 10*sparse(toeplitz([2 1 zeros(1, B.L-3) 1]));
+Q = 10*eye(B.L);
+% see Bar-Shalom Estimation with Appln to Tracking ... (2001) p218
+G = sparse([dt^2/2*eye(B.L); dt*eye(B.L)]);
+W = G * Q * G';
+% observation noise level
+v = 5;
 
 % construct dynamic model
 M = grhModel(A, C, W, v);
@@ -72,4 +73,11 @@ longTracks = Mg.showInfo('1')
 % end
 % Mg.showCellBoundaryVelocites(iCell);
 % Mg.showAllTracks();
+
+flNo = 1;
+while exist(['results' num2str(flNo) '.mat'], 'file')
+    flNo = flNo + 1
+end
+save(['results' num2str(flNo) '.mat'], 'Mg')
+
 

@@ -1,5 +1,7 @@
 function [FD] = getAllFourierDescriptors(obj, Npoints)
 
+% [FD] = getAllFourierDescriptors(obj, Npoints)
+%
 % create an array containing all fourier descriptors from data
 % each FD row has form : [track trackpoint FD]
 
@@ -17,5 +19,6 @@ for i = 1:obj.Ntracks
         
         FD(n,:) = [i j iCell.snake(j).fourierDescriptor(Npoints)'];
         n = n + 1;
+        
     end
 end
