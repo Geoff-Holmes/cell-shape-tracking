@@ -7,7 +7,7 @@ function [newBound, centroidShift] ...
 
 % get net movement of cell centroid
 try
-centroidShift = obj.frames{k}.centroids(new) ...
+centroidShift = obj.frames(k).centroids(new) ...
     - obj.cells(old).getCentroidT(k-1);
 catch exCallcellsgetCentroid
     exCallcellsgetCentroid
@@ -26,7 +26,7 @@ nrm0 = obj.cells(old).getSnakeT(k-1).normal(0);
 %     obj.cells{iCell}.snake(k-1).plotNormal(0);
 
 % prepare new obs boundary for searching
-newBound = obj.frames{k}.bounds{new};
+newBound = obj.frames(k).bounds{new};
 newBoundI = sparse([imag(newBound); imag(p0)], [real(newBound); ...
     real(p0)], [ones(length(newBound), 1); 0]);
 

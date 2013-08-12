@@ -14,7 +14,7 @@ end
     
 % initialise with data from frame 1
 liveTracks    = 1:obj.Ntracks;
-liveCentroids = obj.frames{1}.centroids;
+liveCentroids = obj.frames(1).centroids;
     
 % progress reporter
 m = msgbox(['Iteration 1 of ' num2str(maxIteration)], 'Progress');
@@ -37,7 +37,7 @@ for k = 2:maxIteration
     flagTracksLive = ones(1, NliveTracks);
     
     % get observation info from the next frame
-    obj.frames{k} = obj.ImageHandler.getFrame(obj.Data{k});
+    obj.frames(k) = obj.ImageHandler.getFrame(obj.Data{k});
     
     % for association, update centroid information according to model
     L = obj.Bspline.L;
@@ -56,7 +56,7 @@ for k = 2:maxIteration
        
     % get correspondence vector according to chosen option 1 / 2
     [Crspnd, newCellInds] = obj.corresponder(...
-        liveCentroids, obj.frames{k}.centroids, obj.maxMoveThresh, 1);
+        liveCentroids, obj.frames(k).centroids, obj.maxMoveThresh, 1);
     
 %     try
 %         assert(NliveTracks == length(Crspnd));
@@ -87,7 +87,7 @@ for k = 2:maxIteration
 
             % add properties of the new observation to this cell
             obj.cells(liveTracks(iCell)).addObservation...
-                (Xnew, Qnew, obj.frames{k}.centroids(Crspnd(iCell)), ...
+                (Xnew, Qnew, obj.frames(k).centroids(Crspnd(iCell)), ...
                 Crspnd(iCell), centroidShift, C(:, 1:obj.Bspline.L));
         end
     end
@@ -98,8 +98,8 @@ for k = 2:maxIteration
     
     % create new cell-track for each unallocated observations
     if ~isempty(newCellInds)
-        [obj, newCellIDs] = addNewCells(obj, k, obj.frames{k}, newCellInds);
+        [obj, newCellIDs] = addNewCells(obj, k, obj.frames(k), newCellInds);
         liveTracks = [liveTracks newCellIDs];
-        liveCentroids = [liveCentroids obj.frames{k}.centroids(newCellInds)];
+        liveCentroids = [liveCentroids obj.frames(k).centroids(newCellInds)];
     end
 end
