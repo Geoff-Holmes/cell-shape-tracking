@@ -22,8 +22,8 @@ if nargin == 3 && strcmp(option, 'centre')
     temp = fac' .* temp;
 end
 
-% close the curve
-temp(end+1) = temp(1);
+% % close the curve - WHY??
+% temp(end+1) = temp(1);
 
 % transform
 temp = fft(temp);
