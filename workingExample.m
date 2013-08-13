@@ -8,8 +8,8 @@ addpath(genpath('~/Dropbox/CSTdevelopment/functions'))
 % initialise spline
 B = grhBspline();
 
-% dataName = 'neutroImages_hiRes';
-dataName = 'testData';
+dataName = 'neutroImages_hiRes';
+% dataName = 'testData';
 
 % for random walk model
 % A = sparse(eye(B.L));

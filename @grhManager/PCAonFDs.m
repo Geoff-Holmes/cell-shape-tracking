@@ -39,13 +39,28 @@ A = A(:, ind(1:Npcs));
 % project onto chosen number of principal components
 PC = FD * A;
     
-figure; hold on;
-for i = unique(info(:,1))'
-    data = PC(info(:,1)==i, :);
-try
-    plot3(data(:,1), data(:,2), data(:,3))
-catch
-    plot(data(:,1), data(:,2))
-end
-end
-title('Cell tracks in shape space')
+% figure; hold on;
+% for i = unique(info(:,1))'
+%     data = PC(info(:,1)==i, :);
+%     try
+%         plot3(data(:,1), data(:,2), data(:,3))
+%         zlabel('pc 3')
+%     catch
+%         plot(data(:,1), data(:,2))
+%     end
+%     xlabel('pc 1')
+%     ylabel('pc 2')
+% end
+% title('Cell tracks in shape space')
+% figure
+% for i = unique(info(:,1))'
+%     data = PC(info(:,1)==i, :);
+%     try
+%          p = plot3(data(:,1), data(:,2), data(:,3), 'r');
+%     catch
+%         p = plot(data(:,1), data(:,2), 'r');
+%     end
+%     axis(obj.shapeDescriptorLims(1:end))
+%     pause()
+%     delete(p)
+% end

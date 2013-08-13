@@ -17,6 +17,8 @@ classdef grhManager < handle
         info    = 0;
         shapeDescriptorLims;
         
+        notes;
+        
     end
         
     methods
