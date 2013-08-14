@@ -68,15 +68,15 @@ for t = startFrame:endFrame
             axis([0 obj.DataXYlims(1) 0 obj.DataXYlims(2)]);
             c = 10*round(thisCell.centroid(t-thisCell.firstSeen+1)/10);
             txt(j) = text(real(c), imag(c)+50, num2str(tracks(j)));
-            set(txt(j), 'color', cMap(cInd(j),:));
+%             set(txt(j), 'color', cMap(cInd(j),:));
             if option
                 subplot(1,2,2)
                 plotData = thisCell.snake(t-thisCell.firstSeen+1).shapeDescriptor;
 %                 plot(plotData)
                 try
-                    q(j) = plot3(plotData(1), plotData(2), plotData(3), 'o');
+                    q(j) = plot3(plotData(1), plotData(2), plotData(3), '.');
                 catch ex
-                    q(j) = plot(plotData(1)+10, plotData(2)+10, 'o');
+                    q(j) = plot(plotData(1), plotData(2), '.');
                 end
                 qxt(j) = text(plotData(1), plotData(2), num2str(tracks(j)));
                 set(q(j), 'color', cMap(cInd(j),:));
