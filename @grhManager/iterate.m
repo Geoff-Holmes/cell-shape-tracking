@@ -75,6 +75,9 @@ for k = 2:maxIteration
             [newBound, centroidShift] ...
                 = obj.getNewObsBoundary(k, liveTracks(iCell), Crspnd(iCell));
             
+            % store permutation in place of original (for checking code)
+            obj.frames(k).bounds{Crspnd(iCell)} = newBound;
+            
             % construct time varying observation C matrix
             C = obj.Bspline.getCmatrix(newBound, obj.Model.Sdim);
             
