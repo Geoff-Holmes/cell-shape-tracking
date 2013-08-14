@@ -6,12 +6,14 @@ function frame = getFrame(obj, A)
     % get connected objects
     B = bwconncomp(A, 4);
     concomp = regionprops(B, 'centroid', 'PixelIdxList', 'Area');
+    % initialise reconstructed image
     A = zeros(size(A));
+    % count number of admissable objects found
     cc = 0;
     for i = 1 :length(concomp)
         temp = concomp(i);
         if temp.Area > obj.minAreaThresh
-            % reconstruct binary image for boundary finding
+            % add object to reconstructed binary image for boundary finding
             A(temp.PixelIdxList) = 1;
             cc = cc+1;
             centroids(cc) = temp.Centroid * [1;1i];
@@ -19,7 +21,6 @@ function frame = getFrame(obj, A)
     end
     % get boundary
     [neutroBoundi, L] = bwboundaries(A,4,'noholes');
-    % find boundary length
     for k = 1:cc
         bounds{k} = neutroBoundi{k}*[1i;1];
     end
