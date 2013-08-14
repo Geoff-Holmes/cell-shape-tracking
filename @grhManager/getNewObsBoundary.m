@@ -7,8 +7,13 @@ function [newBound, centroidShift] ...
 
 % get net movement of cell centroid
 try
+% NB previously used estimate spline centroid for old and obs centroid
+% for new but the two don't match so switching to obs for both which should
+% actually give more accurate centroid shift
+% UNLESS FILTERED / SMOOTHED SHAPE IS FAR DIFFERENT FROM OBSERVATION
 centroidShift = obj.frames(k).centroids(new) ...
-    - obj.cells(old).getCentroidT(k-1);
+    - obj.frames(k-1).centroids(obj.cells(old).getObsRefsT(k-1));
+%     - obj.cells(old).getCentroidT(k-1);
 catch exCallcellsgetCentroid
     exCallcellsgetCentroid
 end
