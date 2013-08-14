@@ -1,7 +1,7 @@
 function c = getCentroid(obj, Q)
 
 % get centroid of shape described by spline curve with control points Q
-% this centroid follows the simple calculation of Blake p 
+% this centroid follows the simple calculation of Blake p 63
 if isa(Q, 'grhSnake')
     Q = Q.ctrlPts;
 end
