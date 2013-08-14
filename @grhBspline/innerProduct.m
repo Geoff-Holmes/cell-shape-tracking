@@ -1,7 +1,7 @@
 function ip = innerProduct(obj, Q1, Q2)
 
 % calculate the Bspline curve inner product between curves given by control
-% points Q1 and Q2
+% points Q1 and Q2 Blake p50 p59
 
 Q1x = real(Q1);
 Q1y = imag(Q1);
