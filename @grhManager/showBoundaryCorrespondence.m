@@ -11,12 +11,13 @@ for i = 1:length(nCell.states)-1
     iSnake = nCell.snake(i);
     plot(iSnake, 'g');
     hold on
-    plotCtrlPts(iSnake, 'g');
-    plot(iSnake.ctrlPts(1), 'go')
-    plotNormal(nCell.snake(i), 0)
+%     plotCtrlPts(iSnake, 'g');
+%     plot(iSnake.ctrlPts(1), 'go')
+    plotNormal(nCell.snake(i), 0);
     plot(nCell.snake(i+1), 'r'); 
-    plot(obj.frames{i+1}.bounds{nCell.obsRefs(i+1)}-nCell.centroidShift(i+1))
-    plot(obj.frames{i+1}.bounds{nCell.obsRefs(i+1)}, ':')
+    plot(obj.frames(i+1).bounds{nCell.obsRefs(i+1)}-nCell.centroidShift(i+1))
+    plot(obj.frames(i+1).bounds{nCell.obsRefs(i+1)}, ':')
+    legend('old snake', 'old snake 0 normal', 'new snake', 'backshifted obs', 'actual obs')
     pause()
     hold off
 end

@@ -1,4 +1,4 @@
-function plotNormal(obj, s)
+function handle = plotNormal(obj, s)
 
 switch nargin
     case 1
@@ -9,4 +9,4 @@ switch nargin
         c = obj.curve(s);
 end
 
-line([real(c)'; real(c+n)'], [imag(c)'; imag(c+n)'])
+handle = line([real(c-n)'; real(c+n)'], [imag(c-n)'; imag(c+n)']);

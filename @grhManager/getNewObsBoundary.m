@@ -27,6 +27,8 @@ nrm0 = obj.cells(old).getSnakeT(k-1).normal(0);
 
 % prepare new obs boundary for searching
 newBound = obj.frames(k).bounds{new};
+% make sparse matrix, which includeds the whole boundary and search start
+% point p0, with ones corr to boundary pts and 0 corr to p0
 newBoundI = sparse([imag(newBound); imag(p0)], [real(newBound); ...
     real(p0)], [ones(length(newBound), 1); 0]);
 
