@@ -12,7 +12,6 @@ classdef grhCell < handle
         centroid;       % list
         % obj.centroid stores centroid of segmented observation
         % whereas obj.getCentroidT returns centroid calculated from snake
-        % they are not the same!
         obsRefs;        % list of observations allocated to this cell
         centroidShift;  % list
         Bspline;
