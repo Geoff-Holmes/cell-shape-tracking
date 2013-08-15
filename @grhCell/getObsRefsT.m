@@ -4,7 +4,7 @@ function c = getObsRefsT(obj, t)
 
 t = t - obj.firstSeen + 1;
 try
-c = obj.obsRefts(t);
+c = obj.obsRefs(t);
 catch exGetObsRefsT
     exGetObsRefsT
 end
