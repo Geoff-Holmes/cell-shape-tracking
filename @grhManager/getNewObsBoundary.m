@@ -51,7 +51,7 @@ off1 = 1; off2 = 1;
 % want to find two
 while findCount < 2 && (off1 || off2)
     step = step + 1;
-    % Bresnan line
+    % Bresenham line
     if abs(m) < 1
         deltax = [step round(step*m)];
     else
