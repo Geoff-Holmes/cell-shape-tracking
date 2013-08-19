@@ -30,6 +30,10 @@ classdef grhManager < handle
             obj.Bspline = Bspline;
             obj.Model = Model;
             obj.ImageHandler = ImageHandler;
+            % check
+            if obj.ImageHandler.minBoundaryThresh < obj.Bspline.L
+                obj.ImageHandler.minBoundaryThresh = obj.Bspline.L;
+            end
             obj.corresponder = corresponder;
             obj.maxMoveThresh = maxMoveThresh;
             % load data
