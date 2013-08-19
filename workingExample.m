@@ -3,7 +3,6 @@ function [Mg, longTracks] = workingExample(framesToProcess)
 % add path to main code and make sure spline matrices are on search path
 addpath('~/Dropbox/CSTdevelopment/')
 addpath(genpath('~/Dropbox/CSTdevelopment/functions'))
-%
 
 % initialise spline
 B = grhBspline();
@@ -11,7 +10,9 @@ B = grhBspline();
 dataName = 'neutroImages_hiRes';
 % dataName = 'testData';
 
-% for random walk model
+notes = '';
+
+% % for random walk model
 % A = sparse(eye(B.L));
 % C = [];
 % W = sparse(10*eye(B.L));
@@ -23,6 +24,7 @@ dataName = 'neutroImages_hiRes';
 % C = [];
 % W = sparse(10*eye(2*B.L));
 % v = 5;
+% notes = 'rwmve';
 
 % for constant velocity model
 dt = 1;
@@ -33,12 +35,13 @@ C = [];
 % some correlation between states
 % but what about correlation between velocities and positions
 % Q = 10*sparse(toeplitz([2 1 zeros(1, B.L-3) 1]));
-Q = 10*eye(B.L);
+Q = 10*sparse(eye(B.L));
 % see Bar-Shalom Estimation with Appln to Tracking ... (2001) p218
 G = sparse([dt^2/2*eye(B.L); dt*eye(B.L)]);
 W = G * Q * G';
 % observation noise level
 v = 5;
+notes = 'cv';
 
 % construct dynamic model
 M = grhModel(A, C, W, v);
@@ -51,7 +54,7 @@ H = grhImageHandler(0,45);
 
 % contruct process manager
 % grhManager(Bspline, Model, ImageHandler, corresponder, maxMoveThresh, Data)
-Mg = grhManager(B, M, H, @correspondAuction, 200, dataName);
+Mg = grhManager(B, M, H, @correspondAuction, 20, dataName, notes);
 clear A B C G H M Q W v dt data
 
 % do the main business
