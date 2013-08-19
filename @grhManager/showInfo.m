@@ -1,8 +1,8 @@
 function [enoughBoth, enoughSteps, enoughDist] = ...
     showInfo(obj, opts, minSteps, minDist, angleJumpThresh)
 
-% [enoughSteps, enoughDistance, enoughBoth] = ...
-%     showInfo(obj, opts, minSteps, minDist)
+% [enoughBoth, enoughSteps, enoughDist] = ...
+%   showInfo(obj, opts, minSteps, minDist, angleJumpThresh)
 %
 % Inputs:
 %   opts is a string containing a comination of '1234'. Include:
@@ -12,8 +12,6 @@ function [enoughBoth, enoughSteps, enoughDist] = ...
 %       4 to show cell area distributions
 %   minSteps and MinDist are thresholds above which a track is considere
 %   'good' for further analysis
-%   CAUTION: it is possible that a cell is actively migrating and yet has
-%   near zero net migration
 %
 %   Outputs:
 %       indices of tracks which are above the respective thresholds or both
@@ -41,9 +39,9 @@ iCells = 1:N;
 if length(strfind(opts, '1')) || nargout
     
     Nsteps = [obj.info(:).Nsteps];
-    netD   = [obj.info(:).netDistance];
+    totD   = [obj.info(:).totalDistance];
     
-    figure;
+    figure;100
     set(gcf,'units','normalized','outerposition',[0 0 1 1])
     subplot(2,1,1); hold on;
     b1 = bar(iCells, Nsteps);
@@ -57,19 +55,19 @@ if length(strfind(opts, '1')) || nargout
     title('number of observations by track')
     
     subplot(2,1,2); hold on;
-    b2 = bar(iCells, netD);
+    b2 = bar(iCells, totD);
     % draw threshold line
     l2 = grhCline(0+minDist*1i, N+minDist*1i);
     set(l2, 'color', 'k');
     set(gca, 'Xtick', iCells)
     xlim([0 N+1])
     xlabel('track number')
-    ylabel('net distance migrated')
-    title('net migration by track')
+    ylabel('total distance migrated')
+    title('total migration by track')
     
     % pick out best tracks
     test1 = Nsteps > minSteps;
-    test2 = netD   > minDist;
+    test2 = totD   > minDist;
     ind1  = test1 & test2;   % above both thresholds
     ind2  = test1 & ~test2;  % above step but not distance  
     ind3  = test2 & ~test1;  % above distance but not step

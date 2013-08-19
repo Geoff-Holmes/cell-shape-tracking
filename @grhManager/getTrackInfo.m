@@ -3,10 +3,11 @@ function [obj,  enoughBoth, enoughSteps, enoughDist] ...
 
 % get stat info on cell tracks
 %   Inputs:
-%       minSteps and MinDist are thresholds above which a track is considere
+%       minSteps and MinDist are thresholds above which a track is
+%       considered
 %      'good' for further analysis
-%       CAUTION: it is possible that a cell is actively migrating and yet has
-%       near zero net migration
+%       MinDist is compared to total distance covered rather than net
+%       distance
 %
 %   Outputs:
 %       indices of tracks which are above the respective thresholds
@@ -28,7 +29,7 @@ for i = 1 : obj.Ntracks
     
     % number of timepoints covered by track
     Nsteps               = length(iCell.states);
-    info(i).Nsteps       = Nsteps;
+    info(i).Nsteps       = Nsteps; 
     
     % net movement vector
     netMove              = iCell.centroid(end) - iCell.centroid(1);
@@ -40,6 +41,9 @@ for i = 1 : obj.Ntracks
     % individual cell movements between between each pair of timepoints
     jumps = iCell.centroid(2:end) - iCell.centroid(1:end-1);
     info(i).jumps        = abs(jumps);
+    
+    % total distance covered
+    info(i).totalDistance = sum(abs(jumps));
     
     % trajectory angle change at each time point
     angles = abs(angle(jumps(2:end)- angle(jumps(1:end-1))));
@@ -60,10 +64,10 @@ end
 obj.info = info;
 
 Nsteps = [obj.info(:).Nsteps];
-netD   = [obj.info(:).netDistance];
+totD   = [obj.info(:).totalDistance];
 % test for thresholds
 test1 = Nsteps > minSteps;
-test2 = netD   > minDist;
+test2 = totD   > minDist;
 
 if nargout > 1
     iCells = 1:obj.Ntracks;
