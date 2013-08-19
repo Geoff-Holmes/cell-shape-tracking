@@ -57,23 +57,7 @@ switch type
                 L2(j) = 1;
             end
         end
-        
-    case 3
-        % allocate tracks to obs using an auction
-        % no sharing of obs
-        % mark for omission distances over the threshold
-        display('This method not reliable')
-        throwError
-%         D(D>thresh) = -1
-%         cc = 0;
-%         % continue while there are valid obs to allocate
-%         while length(find(D>=0))
-%             cc = cc + 1;
-%             [j, D] = NNauction(D)
-%             C(j) = cc
-%             if length(j), L2(cc) = 1, end
-%         end
-            
+           
     otherwise
         display('Invalid NN type')
         return
