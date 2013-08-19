@@ -28,8 +28,13 @@ for i = 1 :length(concomp)
 end
 % get boundary
 [neutroBoundi, L] = bwboundaries(A,4,'noholes');
+kk = 1;
 for k = 1:cc
-    bounds{k} = neutroBoundi{k}*[1i;1];
-    centroids(k) = mean(bounds{k});
+    if length(neutroBoundi{k}) > obj.minBoundaryThresh
+        bounds{kk} = neutroBoundi{k}*[1i;1];
+        centroids(kk) = mean(bounds{kk});
+        kk = kk + 1;
+    end
 end
+
 frame = grhFrame(bounds, centroids);
