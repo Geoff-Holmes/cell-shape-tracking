@@ -5,7 +5,7 @@ addpath('~/Dropbox/CSTdevelopment/')
 addpath(genpath('~/Dropbox/CSTdevelopment/functions'))
 
 % initialise spline
-B = grhBspline();
+B = grhBspline(33,3);
 
 dataName = 'neutroImages_hiRes';
 % dataName = 'testData';
@@ -34,13 +34,14 @@ A = sparse([eye(B.L) dt*eye(B.L); zeros(B.L) eye(B.L)]);
 C = []; 
 % some correlation between states
 % but what about correlation between velocities and positions
+% NB ctrl points acheive this anyway if not too many basis functions used.
 % Q = 10*sparse(toeplitz([2 1 zeros(1, B.L-3) 1]));
 Q = 10*sparse(eye(B.L));
 % see Bar-Shalom Estimation with Appln to Tracking ... (2001) p218
 G = sparse([dt^2/2*eye(B.L); dt*eye(B.L)]);
 W = G * Q * G';
 % observation noise level
-v = 5;
+v = 1;
 notes = 'cv';
 
 % construct dynamic model
@@ -79,7 +80,7 @@ longTracks = Mg.showInfo('1')
 
 flNo = 1;
 while exist(['results' num2str(flNo) '.mat'], 'file')
-    flNo = flNo + 1
+    flNo = flNo + 1;
 end
 save(['results' num2str(flNo) '.mat'], 'Mg')
 
