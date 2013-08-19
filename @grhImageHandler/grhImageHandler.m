@@ -9,7 +9,7 @@ classdef grhImageHandler
         
         function obj = grhImageHandler(threshB, threshA)
             % construct image handler
-            % threshB is minimum boundary threshold
+            % threshB is minimum threshold for no. of pixels in boundary
             % threshA is minimum area threshold
             if nargin
                 obj.minBoundaryThresh = threshB;
