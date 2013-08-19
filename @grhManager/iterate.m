@@ -14,7 +14,7 @@ end
     
 % initialise with data from frame 1
 liveTracks    = 1:obj.Ntracks;
-liveCentroids = obj.frames(1).centroids;
+% liveCentroids = obj.frames(1).centroids;
     
 % progress reporter
 m = msgbox(['Iteration 1 of ' num2str(maxIteration)], 'Progress');
@@ -36,34 +36,34 @@ for k = 2:maxIteration
     % flags for track to-continue / be-removed all initially set continue
     flagTracksLive = ones(1, NliveTracks);
     
-    % get observation info from the next frame
-    obj.frames(k) = obj.ImageHandler.getFrame(obj.Data{k});
-    
-    % for association, update centroid information according to model
+    % get predicted centroid position
     L = obj.Bspline.L;
-    % only do it if the prediction makes a difference
-    if size(obj.Model.A, 2) > L && sum(sum(obj.Model.A(L+1:2*L,L+1:2*L)))>0
-        for iCell = 1:NliveTracks
+    % loop over live tracks
+    for iCell = 1:NliveTracks
+        % update centroid information according to model
+        % but only do it if the prediction makes a difference
+        if size(obj.Model.A, 2) > L && sum(sum(obj.Model.A(L+1:2*L,L+1:2*L)))>0
             % get state prediction
             temp = obj.Model.A * obj.cells(liveTracks(iCell)).states{end};
             % get position states only
             temp = temp(1:obj.Bspline.L);
             % calculate predicted centroid from predicted states
-            liveCentroid(iCell) = obj.Bspline.getCentroid(temp);
+            liveCentroids(iCell) = obj.Bspline.getCentroid(temp);
+        else
+            % just get last filtered centroid
+            liveCentroids(iCell)...
+            = obj.cells(liveTracks(iCell)).getCentroidT(k-1);
         end
     end
     clear L temp
-       
+    
+    % get observation info from the next frame
+    obj.frames(k) = obj.ImageHandler.getFrame(obj.Data{k});   
+    
     % get correspondence vector according to chosen option 1 / 2
     [Crspnd, newCellInds] = obj.corresponder(...
         liveCentroids, obj.frames(k).centroids, obj.maxMoveThresh, 1);
     
-%     try
-%         assert(NliveTracks == length(Crspnd));
-%     catch exAssert
-%         exAssert
-%     end
-
     % loop over live tracks
     for iCell = 1:NliveTracks
         
@@ -97,12 +97,12 @@ for k = 2:maxIteration
     
     % tidy up by removing tracks that have ended
     liveTracks = liveTracks(find(flagTracksLive));
-    liveCentroids = liveCentroids(find(flagTracksLive));
+%     liveCentroids = liveCentroids(find(flagTracksLive))
     
     % create new cell-track for each unallocated observations
     if ~isempty(newCellInds)
         [obj, newCellIDs] = addNewCells(obj, k, obj.frames(k), newCellInds);
         liveTracks = [liveTracks newCellIDs];
-        liveCentroids = [liveCentroids obj.frames(k).centroids(newCellInds)];
+%         liveCentroids = [liveCentroids obj.frames(k).centroids(newCellInds)];
     end
 end
