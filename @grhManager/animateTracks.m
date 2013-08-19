@@ -1,4 +1,4 @@
-function animateTracks(obj, tracks, option)
+function animateTracks(obj, tracks, option, option2)
 
 % animateTracks(obj, tracks, option)
 %
@@ -20,8 +20,10 @@ if option && ~length(obj.shapeDescriptorLims)
 end
 
 f = figure;
-% cleanup up routine to ensure figure closes
-cleaner = onCleanup(@() close(f));
+if nargin < 4
+    % cleanup up routine to ensure figure closes
+    cleaner = onCleanup(@() close(f));
+end
 
 % flag for reporting unsmoothed states
 flag = 1;
@@ -88,11 +90,11 @@ for t = startFrame:endFrame
     suptitle(['Frame : ' num2str(t)])
 %     hold off
     % give option to pause between frames
-    if s ==1 && t == 1
-        button = questdlg('', 'Play mode', 'Continuous', ...
+    if s ==1 && t == startFrame
+        bttn = questdlg('', 'Play mode', 'Continuous', ...
             'Pausing', 'Repeating', 'Continuous');
     end
-    if strcmp(button, 'Pausing')
+    if strcmp(bttn, 'Pausing')
         pause()
     else
         pause(0.1)
@@ -101,7 +103,7 @@ for t = startFrame:endFrame
         pause(1)
     end
 end
-if ~strcmp(button, 'Repeating')
+if ~strcmp(bttn, 'Repeating')
     break
 end
 end
