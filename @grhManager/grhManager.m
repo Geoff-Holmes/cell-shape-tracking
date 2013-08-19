@@ -25,7 +25,7 @@ classdef grhManager < handle
         
         function obj ...
                 = grhManager(Bspline, Model, ImageHandler, ...
-                corresponder, maxMoveThresh, dataName)
+                corresponder, maxMoveThresh, dataName, notes)
             
             obj.Bspline = Bspline;
             obj.Model = Model;
@@ -39,6 +39,9 @@ classdef grhManager < handle
             obj.Data = importdata([dataName '.mat']);
             obj.DataL = length(obj.Data);
             obj.DataXYlims = size(obj.Data{1});
+            if nargin > 6
+                obj.notes = notes;
+            end
             
         end
         
