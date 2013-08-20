@@ -91,12 +91,16 @@ for t = startFrame:endFrame-1
             % plot cell position at prev time frame if available
             if thisCell.firstSeen < t
                 try
+                    cp1 = thisCell.snake(tThis-1).ctrlPts;
                     plot(thisCell.snake(tThis-1), 'g'); 
                     if opt
                         % and also ctrlPts
-                        plot(thisCell.snake(tThis-1).ctrlPts, 'g+')
-                        plot(thisCell.snake(tThis-1).ctrlPts, 'go')
-                        grhCtext(thisCell.snake(tThis-1).ctrlPts)
+                        plot(cp1, 'g+')
+                        plot(cp1, 'go')
+                        grhCtext(cp1)
+                        states = thisCell.states{tThis-1};
+                        grhCline(cp1, ...
+                            cp1 + states(obj.Bspline.L+1:obj.Bspline.L*2));
                     end
                 catch ex
                     ex
