@@ -1,4 +1,4 @@
-function animateBoundaryVelocities(obj, tracks)
+function animateBoundaryVelocities(obj, tracks, opt)
 
 % animate boundary velocities for cell/track IDs specified as list in tracks
 % if no list specified show all tracks
@@ -54,6 +54,16 @@ for t = startFrame:endFrame-1
             p(j) = plot(thisCell.snake(tThis));
             set(p(j), 'color', cMap(cInd(j),:));
             hold on
+            if opt
+                % plot control point
+                cp = thisCell.snake(tThis).ctrlPts;
+                plot(cp, '+')
+                plot(cp, 'o')
+                grhCtext(cp)
+                states = thisCell.states{tThis};
+                grhCline(cp, ...
+                    cp + states(obj.Bspline.L+1:obj.Bspline.L*2));
+            end
             % calculate velocities from current states
             C = thisCell.Cmatrix{tThis};
             state = thisCell.states{tThis};
@@ -67,6 +77,26 @@ for t = startFrame:endFrame-1
             if thisCell.lastSeen > t
                 try
                     plot(thisCell.snake(tThis+1), 'r'); 
+                    if opt
+                        % and also ctrlPts
+                        plot(thisCell.snake(tThis+1).ctrlPts, 'r+')
+                        plot(thisCell.snake(tThis+1).ctrlPts, 'ro')
+                        grhCtext(thisCell.snake(tThis+1).ctrlPts)
+                    end
+                catch ex
+                    ex
+                end
+            end
+            % plot cell position at prev time frame if available
+            if thisCell.firstSeen < t
+                try
+                    plot(thisCell.snake(tThis-1), 'g'); 
+                    if opt
+                        % and also ctrlPts
+                        plot(thisCell.snake(tThis-1).ctrlPts, 'g+')
+                        plot(thisCell.snake(tThis-1).ctrlPts, 'go')
+                        grhCtext(thisCell.snake(tThis-1).ctrlPts)
+                    end
                 catch ex
                     ex
                 end
