@@ -15,7 +15,7 @@ if nargin < 3, opt=0; end
 
 f = figure;
 % cleanup up routine to ensure figure closes
-cleaner = onCleanup(@() close(f));
+cleaner = onCleanup(@() delete(f));
 
 % flag for reporting unsmoothed states
 flag = 1;
@@ -60,7 +60,7 @@ for t = startFrame:endFrame-1
                 cp = thisCell.snake(tThis).ctrlPts;
                 plot(cp, '+')
                 plot(cp, 'o')
-                grhCtext(cp)
+                grhCtext(cp);
                 states = thisCell.states{tThis};
                 grhCline(cp, ...
                     cp + states(obj.Bspline.L+1:obj.Bspline.L*2));
@@ -82,10 +82,10 @@ for t = startFrame:endFrame-1
                         % and also ctrlPts
                         plot(thisCell.snake(tThis+1).ctrlPts, 'r+')
                         plot(thisCell.snake(tThis+1).ctrlPts, 'ro')
-                        grhCtext(thisCell.snake(tThis+1).ctrlPts)
+                        grhCtext(thisCell.snake(tThis+1).ctrlPts);
                     end
                 catch ex
-                    ex
+                    ex;
                 end
             end
             % plot cell position at prev time frame if available
@@ -97,13 +97,13 @@ for t = startFrame:endFrame-1
                         % and also ctrlPts
                         plot(cp1, 'g+')
                         plot(cp1, 'go')
-                        grhCtext(cp1)
+                        grhCtext(cp1);
                         states = thisCell.states{tThis-1};
                         grhCline(cp1, ...
                             cp1 + states(obj.Bspline.L+1:obj.Bspline.L*2));
                     end
                 catch ex
-                    ex
+                    ex;
                 end
             end
             % label the cells
