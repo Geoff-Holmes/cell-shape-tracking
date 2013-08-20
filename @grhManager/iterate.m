@@ -22,6 +22,9 @@ set(findobj(m,'style','pushbutton'),'Visible','off')
 
 % cleanup up routine to ensure msgbox closes
 cleaner = onCleanup(@() close(m));
+
+% for compactness
+L = obj.Bspline.L;
     
 for k = 2:maxIteration
     
@@ -37,7 +40,6 @@ for k = 2:maxIteration
     flagTracksLive = ones(1, NliveTracks);
     
     % get predicted centroid position
-    L = obj.Bspline.L;
     % loop over live tracks
     for iCell = 1:NliveTracks
         % update centroid information according to model
@@ -55,7 +57,7 @@ for k = 2:maxIteration
             = obj.cells(liveTracks(iCell)).getCentroidT(k-1);
         end
     end
-    clear L temp
+    clear temp
     
     % get observation info from the next frame
     obj.frames(k) = obj.ImageHandler.getFrame(obj.Data{k});   
