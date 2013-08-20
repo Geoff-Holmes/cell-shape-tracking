@@ -11,6 +11,7 @@ end
 if nargin == 1
     tracks = 1:length(obj.cells);
 end
+if nargin < 3, opt=0; end
 
 f = figure;
 % cleanup up routine to ensure figure closes
