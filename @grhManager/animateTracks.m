@@ -50,7 +50,7 @@ for t = startFrame:endFrame
         subplot(1,2,1);
     end
     hold off
-    imshow(double(~obj.Data{t}) + .9*double(~~obj.Data{t}));
+    imshow(double(full(~obj.Data{t})) + .9*double(full(~~obj.Data{t})));
     title('Coordinate space')
     hold on
     
