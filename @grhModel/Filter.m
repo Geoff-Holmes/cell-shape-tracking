@@ -58,13 +58,7 @@ else
 
     % one time filter
     % model state prediction
-    try
-       Xhat = obj.A * X0;
-    catch exFilter1
-        obj.A
-        X0
-        exFilter1
-    end
+    Xhat = obj.A * X0;
     % model covariance prediction
     P    = obj.A * Q * obj.A' + obj.W;
     % calculate Kalman gain
