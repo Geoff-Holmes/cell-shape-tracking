@@ -5,9 +5,10 @@ addpath('~/Dropbox/CSTdevelopment/')
 addpath(genpath('~/Dropbox/CSTdevelopment/functions'))
 
 % initialise spline
-B = grhBspline(33,3);
+B = grhBspline(20,3);
 
-dataName = 'neutroImages_hiRes';
+dataName = 'neutroImages_Phil_XYpoint7';
+% dataName = 'neutroImages_hiRes';
 % dataName = 'testData';
 
 notes = '';
@@ -22,8 +23,12 @@ notes = '';
 % dt = 1;
 % A = sparse([eye(B.L) dt*eye(B.L); zeros(B.L) zeros(B.L)]);
 % C = [];
-% W = sparse(10*eye(2*B.L));
-% v = 5;
+% % Q = 10*sparse(eye(B.L));
+% % % see Bar-Shalom Estimation with Appln to Tracking ... (2001) p218
+% % G = sparse([dt^2/2*eye(B.L); dt*eye(B.L)]);
+% % W = G * Q * G';
+% W = 100*eye(2*B.L);
+% v = 1;
 % notes = 'rwmve';
 
 % for constant velocity model
@@ -36,7 +41,7 @@ C = [];
 % but what about correlation between velocities and positions
 % NB ctrl points acheive this anyway if not too many basis functions used.
 % Q = 10*sparse(toeplitz([2 1 zeros(1, B.L-3) 1]));
-Q = 10*sparse(eye(B.L));
+Q = 1*sparse(eye(B.L));
 % see Bar-Shalom Estimation with Appln to Tracking ... (2001) p218
 G = sparse([dt^2/2*eye(B.L); dt*eye(B.L)]);
 W = G * Q * G';

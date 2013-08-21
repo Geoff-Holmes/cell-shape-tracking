@@ -10,6 +10,7 @@ function plotBounds(obj, iCell, fig, sp)
     end
     
     if iCell == 0 
+        hold on
         for i = 1:length(obj.bounds)
             plot(obj.bounds{i});
         end
