@@ -26,6 +26,7 @@ for i = 1:length(tracks)
     
     plot(plotData(:,1), plotData(:,2))
     axis(obj.shapeDescriptorLims(1:4))
+    title(['Track : ' num2str(tracks(i))])
     clear plotData
     
 end

@@ -1,6 +1,6 @@
-function [PC, info] = PCAonFDs(obj, Npcs, Npoints)
+function [PC, info, Eigenvalues] = PCAonFDs(obj, Npcs, Npoints)
 
-% [PC, info] = PCAonFDs(obj, Npcs, Npoints)
+% [PC, info, Eigenvalues] = PCAonFDs(obj, Npcs, Npoints)
 %
 % use Principal component analysis to reduce dimension of Fourier
 % Descriptors
@@ -32,7 +32,7 @@ FD = bsxfun(@minus, FD, mean(FD));
 [~, ind] = sort(diag(l));
 ind = wrev(ind);
 % output
-Eigenvalues = num2str(round((wrev(sort(diag(l)))))')
+Eigenvalues = wrev(sort(diag(l)));
 % and choose eigenvecs corresponding to Npcs largest
 A = A(:, ind(1:Npcs));
 
