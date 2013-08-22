@@ -24,7 +24,7 @@ notes = '';
 % A = sparse([eye(B.L) dt*eye(B.L); zeros(B.L) zeros(B.L)]);
 % C = [];
 % % Q = 10*sparse(eye(B.L));
-% % % see Bar-Shalom Estimation with Appln to Tracking ... (2001) p218
+% % % see Bar-Shalom Estimation with Appln to Tracking ... (2001) p273
 % % G = sparse([dt^2/2*eye(B.L); dt*eye(B.L)]);
 % % W = G * Q * G';
 % W = 100*eye(2*B.L);
@@ -39,12 +39,14 @@ A = sparse([eye(B.L) dt*eye(B.L); zeros(B.L) eye(B.L)]);
 C = []; 
 % some correlation between states
 % but what about correlation between velocities and positions
-% NB ctrl points acheive this anyway if not too many basis functions used.
-% Q = 10*sparse(toeplitz([2 1 zeros(1, B.L-3) 1]));
-% Q = 1*sparse(eye(B.L));
+% NB ctrl points acheive this anyway in prop to no. of basis functions used.
 % % see Bar-Shalom Estimation with Appln to Tracking ... (2001) p218
+% Q = qv*sparse(eye(B.L));
+% qv "should be of the order of the maximum acceleration magnitude am.  A
+% practical range is 0.5am <= qv <= am". 
 % G = sparse([dt^2/2*eye(B.L); dt*eye(B.L)]);
 % W = G * Q * G';
+% simple approach:
 W = 20*sparse(eye(2*B.L));
 % observation noise level
 v = 1;

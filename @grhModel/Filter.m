@@ -56,16 +56,17 @@ if szY(2) > 1
 
 else
 
+
+
+end
+
     % one time filter
     % model state prediction
     Xhat = obj.A * X0;
     % model covariance prediction
     P    = obj.A * Q * obj.A' + obj.W;
     % calculate Kalman gain
-    K    = P * obj.C' * pinv(obj.C * P * obj.C' + V);
+    K    = P * obj.C' / (obj.C * P * obj.C' + V);
     % use gain to correct state and covariance
     X    = Xhat + K * (Y - obj.C * Xhat);
     Q    = P - K * obj.C * P;
-
-end
-
