@@ -32,6 +32,7 @@ FD = bsxfun(@minus, FD, mean(FD));
 [~, ind] = sort(diag(l));
 ind = wrev(ind);
 % output
+Eigenvalues = num2str(round((wrev(sort(diag(l)))))')
 Eigenvalues = wrev(sort(diag(l)));
 % and choose eigenvecs corresponding to Npcs largest
 A = A(:, ind(1:Npcs));
