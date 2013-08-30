@@ -4,30 +4,32 @@ function [lameLocation]=lameLocation(obj,n,plt)
 if nargin == 3
     C = n;
 elseif nargin ==2
-    C =n;
+    C = n;
     plt = 0;
 end
-rr = 0;
+
 for iCell = C
     thisCell = obj.tracks.cells(iCell);
-    for iFrame = 1:thisCell.lastSeen - thisCell.firstSeen
+    for iFrame = 1:(thisCell.lastSeen - thisCell.firstSeen)
         d = thisCell.obsRefs(iFrame);
+%         iFrame
         normalV = thisCell.Bspline.normal(thisCell.states{iFrame}(1:thisCell.Bspline.L));
         pCell = thisCell.Bspline.curve(thisCell.states{iFrame}(1:thisCell.Bspline.L));
         lameLabel = zeros(size(pCell));
-        if obj.NLame{iFrame}{d} ~= 0
-            for iLame = 1:obj.NLame{iFrame}{d}
-                pLame = obj.CLbounds{iFrame}{d}{iLame};
+        iiFrame = iFrame+thisCell.firstSeen-1;
+        if obj.NLame{iiFrame}{d} ~= 0
+            for iLame = 1:obj.NLame{iiFrame}{d}
+                pLame = obj.CLbounds{iiFrame}{d}{iLame};
                 
                 for m = 1:length(pLame)%points on lamellipodia
                     for n = 1:length(pCell);
                         
                         if lameLabel(n)==1
                             continue;                            
-                        elseif (sqrt((real(pCell(n))-real(pLame(m)))^2+(imag(pCell(n))-imag(pLame(m)))^2 )< 15)
+                        elseif (sqrt((real(pCell(n))-real(pLame(m)))^2+(imag(pCell(n))-imag(pLame(m)))^2 )< 12)
                                x = [real(pCell(n)), real(pLame(m))];
                                y = [imag(pCell(n)), imag(pLame(m))];
-                           if (abs(((y(2)-y(1))./(x(2)-x(1)))-(imag(normalV(n))/real(normalV(n)))) < 0.1 |abs(((x(2)-x(1))./(y(2)-y(1)))-(real(normalV(n))/imag(normalV(n)))) < 0.1)
+                           if (abs(((y(2)-y(1))./(x(2)-x(1)))-(imag(normalV(n))/real(normalV(n)))) < 0.15 |abs(((x(2)-x(1))./(y(2)-y(1)))-(real(normalV(n))/imag(normalV(n)))) < 0.15)
                                lameLabel(n)=1; 
                            end
                            
@@ -38,9 +40,9 @@ for iCell = C
         end
       lameLocation{iCell}{iFrame} = lameLabel; 
     end
+    obj.lameLoc{iCell} = lameLocation{iCell};
 end
-save ll 
-%                                
+                          
 if plt ~= 0
 
     NPix = 1082;
@@ -57,7 +59,9 @@ if plt ~= 0
     for iCell = C
         c = mod(iCell*10,64);
         thisCell = obj.tracks.cells(iCell);
-        for iFrame = 1:thisCell.lastSeen - thisCell.firstSeen
+        for iFrame = 1:(thisCell.lastSeen - thisCell.firstSeen)
+                    iiFrame = iFrame+thisCell.firstSeen-1;
+
             cla;
             d = thisCell.obsRefs(iFrame);
             pCell = thisCell.Bspline.curve(thisCell.states{iFrame}(1:thisCell.Bspline.L));
@@ -66,12 +70,12 @@ if plt ~= 0
             quiver(real(pCell),imag(pCell),-real(normal),-imag(normal));
             
             hold on
-%             idx = find(lameLocation{iCell}{iFrame} == 1)
+            idx = find(lameLocation{iCell}{iFrame} == 1);
             plot(pCell(idx),'r*');
-            for iLame = 1:obj.NLame{iFrame}{d}
-                plot(obj.CLbounds{iFrame}{d}{iLame},'k');
+            for iLame = 1:obj.NLame{iiFrame}{d}
+                plot(obj.CLbounds{iiFrame}{d}{iLame},'k');
             end
-            pause;
+            pause(1);
         end
     end
 end
