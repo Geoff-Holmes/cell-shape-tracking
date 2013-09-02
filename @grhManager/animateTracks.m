@@ -1,4 +1,4 @@
-function animateTracks(obj, tracks, option, option2)
+function animateTracks(obj, tracks, option, makeVid)
 
 % animateTracks(obj, tracks, option)
 %
@@ -10,14 +10,15 @@ function animateTracks(obj, tracks, option, option2)
 if nargin == 1 || strcmp(tracks, 'all')
     tracks = 1:length(obj.cells);
 end
-if nargin < 3
-    option = 0;
-end
+if nargin < 3, option = 0;end
+if nargin < 4, makeVid = 0; end
 
 % get shape descriptor data if needed
 if option && ~length(obj.shapeDescriptorLims)
     obj.storeShapeDescriptors;
 end
+
+if makeVid, mov = MP4Video('figures/tracks.avi', 2, 600); end
 
 f = figure;
 if nargin < 4
@@ -102,10 +103,14 @@ for t = startFrame:endFrame
     if t == startFrame || t == endFrame
         pause(1)
     end
+    if makeVid, mov = takeframe(mov, gcf); end
 end
 if ~strcmp(bttn, 'Repeating')
     break
 end
 end
  
-
+if makeVid
+    makeMP4(mov);
+    cleanMP4(mov);
+end
