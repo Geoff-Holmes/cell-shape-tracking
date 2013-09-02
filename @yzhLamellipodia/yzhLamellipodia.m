@@ -1,17 +1,19 @@
 classdef yzhLamellipodia<handle
     
     properties
-    lameBounds      % boundaries of lamellipodia
+    lameBounds      % boundaries of lamellipodia lameBounds{iiFrame}
     tracks          % tracking results of cell main body
-    NLame           %NLame{iFrame}{iCell} the no of lamellipodia each cell has
-    CLbounds        %CLbounds{iFrame}{iCell}{cc} boundaries of lamellipodia in each cell 
-    lameLocation    % lameLocation{iCell}{iFrame} each cell in each frame the distribution of lamellipodia
+    NLame           % NLame{iiFrame}{iiCell} the no of lamellipodia each cell has
+    CLbounds        % CLbounds{iiFrame}{iiCell}{cc} boundaries of lamellipodia in each cell 
+    lameLoc = {}    % lameLoc{iCell}{iFrame} each cell in each frame the distribution of lamellipodia
+                    % The same as tracks. 
+                    % iiFrame = iFrame+thisCell.firstSeen-1;
     end
     
     
     methods
         function obj = yzhLamellipodia(lameBoundsFile,trackResults)
-            
+           
             addpath('../saveMat');
             addpath('/Users/Yang/Dropbox/Public/yzhMATLAB/Geoff_Code/saveMat');
             load(lameBoundsFile); 
@@ -28,7 +30,6 @@ classdef yzhLamellipodia<handle
             obj.tracks = Mg; 
             obj.NLame = [];
             obj.CLbounds = [];
-            obj.lameLocation = [];
         end
     end
 end

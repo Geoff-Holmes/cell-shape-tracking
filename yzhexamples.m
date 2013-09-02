@@ -20,10 +20,10 @@ P0 = eye(4*Bs.L);
 dt = 1;
 
 Q = 10*sparse(toeplitz([2 1 zeros(1, Bs.L-3) 1]));
-% W = eye(Bs.L*2);
+W = eye(Bs.L*2);
 % see Bar-Shalom Estimation with Appln to Tracking ... (2001) p218
-G = sparse([dt^2/2*eye(Bs.L); dt*eye(Bs.L)]);
-W = G * Q * G';
+% G = sparse([dt^2/2*eye(Bs.L); dt*eye(Bs.L)]);
+% W = G * Q * G';
 % observation noise level
 v = 1;
 Model = grhModel(A,C,W,v);
@@ -38,11 +38,11 @@ Mg.iterate();
 
 Mg.smoothAllCellStates();
 
-save saveMat/MgJ21-F3 Mg  
+longTracks = Mg.showInfo(1);
 
-longTracks = Mg.showInfo(1)
-% 
-% % show some results
+save saveMat/MgJ21-F3 Mg longTracks 
+ 
+% --------------------- show some tracking results ------------------
 % for iCell = longTracks
 %     Mg.animateTrack(iCell);
 % end
@@ -50,19 +50,39 @@ longTracks = Mg.showInfo(1)
 % Mg.showAllTracks();
 % 
 % Mg.showCellBoundaryVelocites(2);
-%% -----------------------lamellipodia ------------------------
+%% %%%%%%-----------------lamellipodia ---------------%%%%%%---------------
 
 La = yzhLamellipodia('lameBounds','MgJ21-F3');
 
-figure
-La.plotLameAll; %draw the overview of lamellipodia distribution
-  
-%correlated cell+lame
+%---draw the overview of cell migration/ raw data with lamellipodia---
+% La.plotLameAll; 
+%---------------------------------------------------------------------
+
+%-------------------correlated cell+lame------------------------------
 La.lameAssociateCell(); %La.lameAssociateCell(1)draw the figures
+%---------------------------------------------------------------------
 
-La.lameLocation(12,1);
+%---------find the distribution of lamellipodia for each cell --------
+for iCell = longTracks
+    iCell
+    La.lameLocation(iCell);
+end
+save saveMat/LaJ21-F3 La
+%---------------------------------------------------------------------
 
 
+%% ----------%%%%%----------- Analysis ------------------%%%%%-------------
+% clear all;
+% addpath('saveMat/');
+% addpath('functions/');
+% download('LaJ21-F3');
+% download('MgJ21-F3');
+Ay = yzhCellAnalysis(Mg,La);
+for iCell = longTracks
+    PN{iCell} = Ay.cellOrientation(iCell);
+end
+
+Ay.orienVsLame(longTracks);
 
 %%%%%
 

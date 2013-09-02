@@ -15,7 +15,9 @@ classdef grhCell < handle
         obsRefs;        % list of observations allocated to this cell
         centroidShift;  % list
         Bspline;
-        smoothed = 0;   % flag       
+        smoothed = 0;   % flag
+        
+        
     end
     
     methods
@@ -33,6 +35,7 @@ classdef grhCell < handle
             obj.obsRefs(1) = obsRefs;
             obj.centroidShift(1) = 0;
             obj.states{1} = states;
+            obj.Cmatrix{1} = Cmatrix;
         end
         
     end
