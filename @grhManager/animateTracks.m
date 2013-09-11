@@ -5,20 +5,35 @@ function animateTracks(obj, tracks, option, makeVid)
 % animate trajectory for cell/track IDs specified as list in tracks
 % if no list specified show all tracks
 % if option is true tracks in shape space will also be shown.
+% if makeVid is passed a video is created with the named passed in makeVid
 
 % check whether a subset of tracks is specified
 if nargin == 1 || strcmp(tracks, 'all')
     tracks = 1:length(obj.cells);
 end
 if nargin < 3, option = 0;end
-if nargin < 4, makeVid = 0; end
+if nargin == 4
+    if isstruct(makeVid)
+        rate = makeVid.rate;
+        res  = makeVid.res;
+        name = makeVid.name;
+        makeVid = 1;
+    else if isstr(makeVid)
+            name = makeVid;
+        else
+            makeVid = 'tracks';
+        end
+    end
+else makeVid = 0;
+end
+
 
 % get shape descriptor data if needed
 if option && ~length(obj.shapeDescriptorLims)
     obj.storeShapeDescriptors;
 end
 
-if makeVid, mov = MP4Video('figures/tracks.avi', 2, 600); end
+if makeVid, mov = MP4Video([name '.avi'], rate, res); end
 
 f = figure;
 if nargin < 4
