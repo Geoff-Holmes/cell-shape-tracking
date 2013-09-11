@@ -2,15 +2,16 @@
 % this is the example for the breast cancer data %%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 clear all; clc; close all;
+Input = 'Blebb-J19-F2-';
 addpath('saveMat/');
 addpath('functions/');
-load('cellImage');
+load([Input,'cellImage']);
 
 %% 1. initialize bsplines
 Bs = grhBspline(20,4);
 
 %% 2. loading data ---- binary image with same x-y axis
-data =  'cellImage';
+data = [Input,'cellImage'];
 
 %% 3. for cv model
 A = eye(Bs.L);  A = [A, A;zeros(size(A)) A];
@@ -38,51 +39,73 @@ Mg.iterate();
 
 Mg.smoothAllCellStates();
 
-longTracks = Mg.showInfo(1);
-
-save saveMat/MgJ21-F3 Mg longTracks 
+longTracks = Mg.showInfo();
+% %------ save  inter -------------------%
+ filename = ['saveMat/',Input,'Mg'] ; %%
+ save(filename, 'Mg', 'longTracks');  %%
+% %--------------------------------------%
  
 % --------------------- show some tracking results ------------------
 % for iCell = longTracks
-%     Mg.animateTrack(iCell);
+%     iCell
+%     Mg.animateTracks(iCell);
+% %     pause;
 % end
-% 
-% Mg.showAllTracks();
+% % 
+% Mg.showTracks();
 % 
 % Mg.showCellBoundaryVelocites(2);
 %% %%%%%%-----------------lamellipodia ---------------%%%%%%---------------
 
-La = yzhLamellipodia('lameBounds','MgJ21-F3');
+fileL = [Input,'lamellipodia'];
+fileMg = [Input,'Mg'];
+La = yzhLamellipodia(fileL,fileMg);
 
 %---draw the overview of cell migration/ raw data with lamellipodia---
 % La.plotLameAll; 
 %---------------------------------------------------------------------
 
 %-------------------correlated cell+lame------------------------------
-La.lameAssociateCell(); %La.lameAssociateCell(1)draw the figures
+La.lameAssociate(); %La.lameAssociateCell(1)draw the figures
 %---------------------------------------------------------------------
 
 %---------find the distribution of lamellipodia for each cell --------
+
+% %---------save inter -----------------%
+filename = ['saveMat/',Input,'La'];   %
+save(filename, 'La');                 %
+% %-------------------------------------%
+
+
+
+
+%% ----------%%%%%----------- Analysis ------------------%%%%%-------------
+
 for iCell = longTracks
     iCell
     La.lameLocation(iCell);
 end
-save saveMat/LaJ21-F3 La
-%---------------------------------------------------------------------
 
-
-%% ----------%%%%%----------- Analysis ------------------%%%%%-------------
-% clear all;
-% addpath('saveMat/');
-% addpath('functions/');
-% download('LaJ21-F3');
-% download('MgJ21-F3');
 Ay = yzhCellAnalysis(Mg,La);
 for iCell = longTracks
     PN{iCell} = Ay.cellOrientation(iCell);
 end
+save(['saveMat/',Input,'Ay'],'Ay');
 
-Ay.orienVsLame(longTracks);
-
-%%%%%
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%   %
+%      anaylsis about the location of lamellipodia     %
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+clear all;
+close all;
+addpath('saveMat/');
+addpath('functions/');
+load('Blebb-J19-F2-La');
+load('Blebb-J19-F2-Mg');
+load('Blebb-J19-F2-Ay')
+longTracks = Mg.showInfo('1234');
+Mg.showTracks();
+set(gcf,'color',[1,1,1])
+[data2,data21] = Ay.orienVsLame(longTracks,'123');
+% save ('figDesign/data2','data2','data21');
+%%%
 

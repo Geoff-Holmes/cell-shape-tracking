@@ -3,6 +3,7 @@ function [lameLocation]=lameLocation(obj,n,plt)
 % Find the range of lamellipodia over the boundary              %
 if nargin == 3
     C = n;
+    plt = plt
 elseif nargin ==2
     C = n;
     plt = 0;
