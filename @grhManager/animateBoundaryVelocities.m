@@ -30,10 +30,15 @@ cInd = cInd(randperm(length(cInd)));
 startFrame = min([obj.cells(tracks).firstSeen]);
 endFrame   = max([obj.cells(tracks).lastSeen]);
     
-% loop for repeating option
-for s = 1:10
-for t = startFrame:endFrame-1
+% the following variable names required by interactFigAni
+T = endFrame - startFrame + 1;
+t = 1;
+abort = 0;
+tic
+
+while ~abort
     
+    tt = t + startFrame - 1;
     
 %     imshow(double(~obj.Data{t}) + .9*double(~~obj.Data{t}));
 %     hold on
@@ -47,10 +52,10 @@ for t = startFrame:endFrame-1
             display('Smoother not yet applied.  Using filtered states'); 
         end
         
-        if thisCell.firstSeen <= t && thisCell.lastSeen >= t
+        if thisCell.firstSeen <= tt && thisCell.lastSeen >= tt
             
             % get correct time index for this cell
-            tThis = t-thisCell.firstSeen+1;
+            tThis = tt-thisCell.firstSeen+1;
             % plot current cell outline
             p(j) = plot(thisCell.snake(tThis));
             set(p(j), 'color', cMap(cInd(j),:));
@@ -75,7 +80,7 @@ for t = startFrame:endFrame-1
             % plot velocity vectors
             grhCline(c, c+v);
             % plot cell position at next time frame if available
-            if thisCell.lastSeen > t
+            if thisCell.lastSeen > tt
                 try
                     plot(thisCell.snake(tThis+1), 'r'); 
                     if opt
@@ -89,7 +94,7 @@ for t = startFrame:endFrame-1
                 end
             end
             % plot cell position at prev time frame if available
-            if thisCell.firstSeen < t
+            if thisCell.firstSeen < tt
                 try
                     cp1 = thisCell.snake(tThis-1).ctrlPts;
                     plot(thisCell.snake(tThis-1), 'g'); 
@@ -117,23 +122,29 @@ for t = startFrame:endFrame-1
         axis([0 obj.DataXYlims(1) 0 obj.DataXYlims(2)]);
     end
     hold off
-    % give option to pause between frames
-    if s ==1 && t == 1
-        button = questdlg('', 'Play mode', 'Continuous', ...
-            'Pausing', 'Repeating', 'Continuous');
-    end
-    if strcmp(button, 'Pausing')
-        pause()
-    else
-        pause(0.1)
-    end
-    if t == startFrame || t == endFrame
-        pause(1)
-    end
+%     % give option to pause between frames
+%     if s ==1 && t == 1
+%         button = questdlg('', 'Play mode', 'Continuous', ...
+%             'Pausing', 'Repeating', 'Continuous');
+%     end
+%     if strcmp(button, 'Pausing')
+%         pause()
+%     else
+%         pause(0.1)
+%     end
+%     if t == startFrame || t == endFrame
+%         pause(1)
+%     end
+% end
+% if ~strcmp(button, 'Repeating')
+%     break
+% end
+
+% control
+if t == 1, xlabel('Animation Control Frame'); end
+run functions/grhAnimationControl
+
 end
-if ~strcmp(button, 'Repeating')
-    break
-end
-end
+
  
 

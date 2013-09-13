@@ -54,10 +54,13 @@ cInd = cInd(randperm(length(cInd)));
 startFrame = min([obj.cells(tracks).firstSeen]);
 endFrame   = max([obj.cells(tracks).lastSeen]);
 
- 
-% loop for repeating option
-for s = 1:10
-for t = startFrame:endFrame
+% the following variable names required by interactFigAni
+T = obj.DataL;
+t = 1;
+abort = 0;
+tic
+
+while ~abort
     
     if option
         subplot(1,2,2), hold off;
@@ -105,26 +108,30 @@ for t = startFrame:endFrame
     end
     suptitle(['Frame : ' num2str(t)])
 %     hold off
-    % give option to pause between frames
-    if s ==1 && t == startFrame
-        bttn = questdlg('', 'Play mode', 'Continuous', ...
-            'Pausing', 'Repeating', 'Continuous');
-    end
-    if strcmp(bttn, 'Pausing')
-        pause()
-    else
-        pause(0.1)
-    end
-    if t == startFrame || t == endFrame
-        pause(1)
-    end
+%     % give option to pause between frames
+%     if s ==1 && t == startFrame
+%         bttn = questdlg('', 'Play mode', 'Continuous', ...
+%             'Pausing', 'Repeating', 'Continuous');
+%     end
+%     if strcmp(bttn, 'Pausing')
+%         pause()
+%     else
+%         pause(0.1)
+%     end
+%     if t == startFrame || t == endFrame
+%         pause(1)
+%     end
     if makeVid, mov = takeframe(mov, gcf); end
+% if ~strcmp(bttn, 'Repeating')
+%     break
+% end
+
+% control
+if t == 1, xlabel('Animation Control Frame'); end
+run functions/grhAnimationControl
+
 end
-if ~strcmp(bttn, 'Repeating')
-    break
-end
-end
- 
+
 if makeVid
     makeMP4(mov);
     cleanMP4(mov);
