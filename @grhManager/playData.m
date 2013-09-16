@@ -1,14 +1,8 @@
-function playData(obj, framePause)
+function playData(obj)
 
 % playData(obj, speed)
 %
-% play through the data
-% framepause specifies time in seconds to pause between frames
-% default is 0.2, if set to 0 pause until user button press
-
-if nargin == 1
-    framePause = 0.2;
-end
+% play through the data with animation control
 
 f = figure;
 
@@ -17,16 +11,25 @@ warning('off', 'Images:initSize:adjustingMag')
 % cleanup up routine to ensure figure closes
 cleaner = onCleanup(@() delete(f));
 
-for t = 1:obj.DataL
+t = 1;            % current / starting frame frame
+T = obj.DataL;    % final frame / data length
+abort = 0;        % stopping flag
+tic;              % i.e. initiate timer
+
+I = imshow(obj.Data{t});
+
+while ~abort
     
-    imshow(obj.Data{t})
+    % control
+    if t == 1, xlabel('Animation Control Frame'); end
+    run functions/grhAnimationControl
+    
+    set(I, 'CData', obj.Data{t});
     title(['Frame : ' num2str(t)])
+    pause(0.001) % big plotting time requires minimum pause
+%     set(gcf, 'Position', [420 190 870 640])
     
-    if framePause
-        pause(framePause)
-    else
-        pause()
-    end
+
     
 end
     

@@ -1,13 +1,16 @@
 % animation control script.  The calling code must have already specified 
 % variables:
 % t = 1;            % current / starting frame frame
-% T = dataLength;   % final frame
+% T = dataLength;   % final frame / data length
 % abort = 0;        % stopping flag
 % tic;              % i.e. initiate timer
 %
 % The script should come within the loop:
 % while ~abort
-%  ...
+%   ...
+%   % control
+%   % if t == 1, xlabel('Animation Control Frame'); end
+%   run functions/grhAnimationControl
 % end
 %
 % This script then advaces the frame with a pause specified by the user 
