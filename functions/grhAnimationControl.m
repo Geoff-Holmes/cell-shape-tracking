@@ -37,6 +37,17 @@ if t == 1 || t == T
     waitforbuttonpress
 end
 
+if exist('x', 'var')
+    if x < x0
+        if toc < pse
+            pause(pse-toc)
+        end
+    else
+%         pause()
+        waitforbuttonpress  
+    end
+end
+
 xl = get(gca, 'XLim');
 yl = get(gca, 'YLim');
 x0 = sum(xl)/2;
@@ -66,15 +77,6 @@ else if abs((x-x0)/xScl) > 1
             pse = 0;
         else
             pse = .51 - abs((y0 - y)/yScl/2);
-        end
-
-        if x < x0
-            if toc < pse
-                pause(pse-toc)
-            end
-        else
-    %         pause()
-            waitforbuttonpress  
         end
     end
 end
