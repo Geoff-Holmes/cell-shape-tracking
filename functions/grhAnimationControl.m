@@ -1,5 +1,15 @@
 % animation control script.  The calling code must have already specified 
-% variables, t (current frame), T (final frame), abort = 0, and tic.
+% variables:
+% t = 1;            % current / starting frame frame
+% T = dataLength;   % final frame
+% abort = 0;        % stopping flag
+% tic;              % i.e. initiate timer
+%
+% The script should come within the loop:
+% while ~abort
+%  ...
+% end
+%
 % This script then advaces the frame with a pause specified by the user 
 % clicking in the control frame (see below) as follows:
 %
