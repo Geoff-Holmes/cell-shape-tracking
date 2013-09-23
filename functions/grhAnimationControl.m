@@ -43,8 +43,9 @@ if exist('x', 'var')
             pause(pse-toc)
         end
     else
-%         pause()
-        waitforbuttonpress  
+        if t > 1 && t < T
+            waitforbuttonpress  
+        end
     end
 end
 

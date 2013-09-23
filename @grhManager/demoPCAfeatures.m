@@ -1,6 +1,11 @@
 function demoPCAfeatures(obj, prc)
 
-% demonstrate PCA dimension features
+% demoPCAfeatures(obj, prc)
+
+% demonstrate PCA dimension features i.e. for each of first 3 dimension
+% show some shapes in the bottom and top percentiles for that dimension
+% i.e. show the maximum contrast for that dimension.
+
 
 
 [A, B, evalues] = obj.PCAonFDs;
