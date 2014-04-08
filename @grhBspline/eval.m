@@ -36,7 +36,7 @@ if size(ctrlPts, 1) == 1
 end
 
 % default number of evaluation points
-divs = 100*obj.L;
+divs = 100*obj.L+1;
 
 if nargin == 4
     if s >= 0
