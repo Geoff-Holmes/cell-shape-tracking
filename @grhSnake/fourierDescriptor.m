@@ -59,7 +59,7 @@ end
 temp = temp / abs(temp(2));
 % find index of second largest magnitude component
 [~, indk] = max(abs(temp(3:end)));
-indk = indk + 2
+indk = indk + 2;
 
 % get phase of first and second largest components
 th1 = angle(temp(2));
