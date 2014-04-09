@@ -1,19 +1,24 @@
-function [FD, absFD] = fourierDescriptor(obj, Npoints)
+function [FD, RlImFD, absFD] = fourierDescriptor(obj, Npoints)
 
-% [FD, absFD] = fourierDescriptor(obj, Npoints, option)
+% [FD, RlImFD, absFD] = fourierDescriptor(obj, Npoints)
 %
 % calculate fourier shape descriptor using MATLAB fft
-% Npoints specifies the number of boundary points to use must be even
-% option = centred 
+%
+% INPUTS:
+% Npoints specifies the number of boundary points to use from the shape
+% option = centred [this option now disabled]
 %   see Gonzalez 'Digital Image Processing using Matlab' p458f
-
-% get boundary points
-% NB fft is fastest if #points is a power of 2 slower if # has large prime
+%
+% OUTPUTS:
+% FD     - the complex value Fourier Descriptors
+% RlImFD - [real(FD); imag(FD)] for distance calculation
+% absFD  - absolute values of the components
+% 
+% NB fft is fastest if #points is a power of 2 slowest if # has large prime
 % factors.
 %
 % to recover the original shape from centred Fourier descriptor
-% first use S = ifft(FD) then decenter by doing
-% S = S .* -1.^(0:length(S)-1)
+% use S = ifft(FD) 
 % n.b. in the above FD is the complex centred Fourier descriptor not the
 % absolute values of the components.
 
@@ -81,6 +86,9 @@ end
 % find the start point which maximises disambiguation criterion
 [~, indARC] = max(ARC);
 FD = FD{indARC};
+
+% output with Real and Imaginary parts separated
+RlImFD = [real(FD); imag(FD)];
 
 % get magnitude to output also
 absFD = abs(FD); 
