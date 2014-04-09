@@ -43,6 +43,14 @@ temp = fft(temp);
 % set DC to zero
 temp(1) = 0;
 % make scale invariant
+% this assume a simple closed figure traced anti-clockwise in which case
+% the second component has the largest magnitude
+try
+    [~, ind] = max(temp);
+    assert(ind == 2);
+catch
+    display('Incorrectly composed boundary - Fourier descriptor normalisation compromised')
+end
 temp = temp / abs(temp(2));
 % find index of second largest magnitude component
 [~, indk] = max(abs(temp(3:end)));
