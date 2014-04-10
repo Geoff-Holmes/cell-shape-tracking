@@ -1,4 +1,4 @@
-function [PC, info, Eigenvalues] = PCAonFDs(obj, Npcs, Npoints)
+function [PC, info, Eigenvalues, Eigenvectors] = PCAonFDs(obj, Npcs, Npoints)
 
 % [PC, info, Eigenvalues] = PCAonFDs(obj, Npcs, Npoints)
 %
@@ -8,6 +8,10 @@ function [PC, info, Eigenvalues] = PCAonFDs(obj, Npcs, Npoints)
 % Npoints sets numbers of points around shape boundaries
 % PC is principal components of the shape data
 % info contains track and track frame number
+%
+% NB from high Res dataset it looks as though the PC projection basically
+% just picks out the FD components related to the first and second
+% frequencies.
 
 if nargin < 2
     Npcs = 3;
@@ -35,10 +39,10 @@ ind = wrev(ind);
 Eigenvalues = num2str(round((wrev(sort(diag(l)))))')
 Eigenvalues = wrev(sort(diag(l)));
 % and choose eigenvecs corresponding to Npcs largest
-A = A(:, ind(1:Npcs));
+Eigenvectors = A(:, ind(1:Npcs))
 
 % project onto chosen number of principal components
-PC = FD * A;
+PC = FD * Eigenvectors;
     
 % figure; hold on;
 % for i = unique(info(:,1))'

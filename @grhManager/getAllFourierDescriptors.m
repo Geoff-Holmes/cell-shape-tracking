@@ -17,7 +17,8 @@ for i = 1:obj.Ntracks
     
     for j = 1:length(iCell.snake)
         
-        FD(n,:) = [i j iCell.snake(j).fourierDescriptor(Npoints)'];
+        [~, temp] = iCell.snake(j).fourierDescriptor(Npoints);
+        FD(n,:) = [i j temp'];
         n = n + 1;
         
     end
