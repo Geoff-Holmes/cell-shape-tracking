@@ -67,7 +67,7 @@ if nargin == 4
         if s == -1
             divs = obj.L+1;  % evaluate at all knots
         else
-            divs = -s;
+            divs = -s+1;
         end
     end
 end
