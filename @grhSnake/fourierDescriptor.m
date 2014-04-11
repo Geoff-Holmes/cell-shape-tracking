@@ -15,7 +15,8 @@ function [FD, RlImFD, absFD] = fourierDescriptor(obj, Npoints)
 % absFD  - absolute values of the components
 % 
 % NB fft is fastest if #points is a power of 2 slowest if # has large prime
-% factors.
+% factors.  However - for the normalisation here to work Npoints must be
+% odd.
 %
 % to recover the original shape from centred Fourier descriptor
 % use S = ifft(FD) 
@@ -24,11 +25,67 @@ function [FD, RlImFD, absFD] = fourierDescriptor(obj, Npoints)
 
 if nargin == 1
     % default number
-    temp = obj.curve();
+    Npoints = 33;
 else
-    % specified number
-    temp = obj.curve(-Npoints-1);
+    if ~mod(Npoints, 2)
+        Npoints = Npoints + 1;
+    end
 end
+
+% get un-normalised Fourier Descriptor
+rawFD = fft(obj.curve(-Npoints));
+
+% NORMALISATION: my own method based on an understanding of  Gonzalez
+% 'Digital Image Processing' (2nd Edition) p404f, :  The reasoning is as
+% follows: make translation invariant by removing DC component and make
+% scale invariant by dividing by largest magnitude component (both standard
+% approach); Make rotation and starting point invariant by choosing the
+% combination of rotation and start point which simultaneously set the
+% phase of the largest component to zero and minimises the phase of the
+% second largest component (considered over range [0 2pi).
+% %
+% set DC to zero
+rawFD(1) = 0;
+% make scale invariant
+% this assume a simple closed figure traced anti-clockwise in which case
+% the second component has the largest magnitude
+try
+    [~, ind] = max(rawFD);
+    assert(ind == 2);
+catch
+    display('Incorrectly composed boundary - Fourier descriptor normalisation compromised')
+end
+rawFD = rawFD / abs(rawFD(2));
+
+% find index of second largest magnitude component
+[~, indk] = max(abs(rawFD(3:end)));
+indk = indk + 2;
+
+% get phase of largest and second largest (kth) components
+th1 = angle(rawFD(2));
+thK = angle(rawFD(indk));
+
+% get phase change for all possible start points of shape
+N = length(rawFD);
+phs = (0:N-1) * 2*pi/N;
+
+% get phase of component k after all these starting point shifts 
+thK = thK - th1 - phs + (indk-1) * phs;
+
+% find the starting point where component k has minimum phase in [0, 2pi)
+[~, indSt] = min(mod(thK, 2*pi));
+
+% normalise for start point and rotation
+FD = rawFD .* exp(1j * ((-th1-phs(indSt)) + (0:N-1)'*phs(indSt))); 
+
+% output with Real and Imaginary parts separated
+RlImFD = [real(FD); imag(FD)];
+
+% get magnitude to output also
+absFD = abs(FD); 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 
 % if nargin == 3 && strcmp(option, 'centre')
 %     % centre the transform
@@ -37,63 +94,58 @@ end
 %     temp = fac' .* temp;
 % end
 
-% transform
-temp = fft(temp);
 
-% NORMALISATION: using a combination of Gonzalez 'Digital Image Processing 
-% using Matlab' p458f, and Timothy P. Wallace†, Paul A. Wintz‡ 1980 
-% "An efficient three-dimensional aircraft recognition algorithm using 
-% normalized fourier descriptors"
-% % 
-% set DC to zero
-temp(1) = 0;
-% make scale invariant
-% this assume a simple closed figure traced anti-clockwise in which case
-% the second component has the largest magnitude
-try
-    [~, ind] = max(temp);
-    assert(ind == 2);
-catch
-    display('Incorrectly composed boundary - Fourier descriptor normalisation compromised')
-end
-temp = temp / abs(temp(2));
-% find index of second largest magnitude component
-[~, indk] = max(abs(temp(3:end)));
-indk = indk + 2;
-
-% get phase of first and second largest components
-th1 = angle(temp(2));
-thk = angle(temp(indk));
-
-% get angle required for rotation and start point to transform these two
-% phases to zero which is the final normalisation requirement
-A = -[1 1; 1 indk-1]\[th1; thk];
-% get the multiple alternative start point angles
-A2 = A(2) + (0:indk-2)*2*pi/indk;
-% apply rotation and starting point alteration
-k = 0:length(temp)-1;
-FD{1} = temp .* exp(1i*(A(1) + k'*A(2)));
-% compute the ambiguity resolving criteria
-ARC(1) = sum(real(FD{1}).*abs(real(FD{1})));
-
-for cc = 2:indk-1
-    % get to next candidate start location
-    FD{cc} = temp .* exp(1i*(A(1) + k'*A2(cc)));
-    % compute the ambiguity resolving criteria
-    ARC(cc) = sum(real(FD{cc}).*abs(real(FD{cc})));
-end
-
-% find the start point which maximises disambiguation criterion
-[~, indARC] = max(ARC);
-FD = FD{indARC};
-
-% output with Real and Imaginary parts separated
-RlImFD = [real(FD); imag(FD)];
-
-% get magnitude to output also
-absFD = abs(FD); 
-
-
+% % NORMALISATION: using a combination of Gonzalez 'Digital Image Processing 
+% % using Matlab' p458f, and Timothy P. Wallace†, Paul A. Wintz‡ 1980 
+% % "An efficient three-dimensional aircraft recognition algorithm using 
+% % normalized fourier descriptors"
+% % % 
+% % set DC to zero
+% temp(1) = 0;
+% % make scale invariant
+% % this assume a simple closed figure traced anti-clockwise in which case
+% % the second component has the largest magnitude
+% try
+%     [~, ind] = max(temp);
+%     assert(ind == 2);
+% catch
+%     display('Incorrectly composed boundary - Fourier descriptor normalisation compromised')
+% end
+% temp = temp / abs(temp(2));
+% % find index of second largest magnitude component
+% [~, indk] = max(abs(temp(3:end)));
+% indk = indk + 2
+% % get phase of first and second largest components
+% th1 = angle(temp(2));
+% thk = angle(temp(indk));
+% 
+% % get angle required for rotation and start point to transform these two
+% % phases to zero which is the final normalisation requirement
+% A = -[1 1; 1 indk-1]\[th1; thk];
+% % get the multiple alternative start point angles
+% A2 = A(2) + (0:indk-2)*2*pi/indk;
+% % apply rotation and starting point alteration
+% k = 0:length(temp)-1;
+% FD{1} = temp .* exp(1i*(A(1) + k'*A(2)));
+% % compute the ambiguity resolving criteria
+% ARC(1) = sum(real(FD{1}).*abs(real(FD{1})));
+% 
+% for cc = 2:indk-1
+%     % get to next candidate start location
+%     FD{cc} = temp .* exp(1i*(A(1) + k'*A2(cc)));
+%     % compute the ambiguity resolving criteria
+%     ARC(cc) = sum(real(FD{cc}).*abs(real(FD{cc})));
+% end
+% 
+% % find the start point which maximises disambiguation criterion
+% [~, indARC] = max(ARC);
+% FD = FD{indARC};
+% 
+% % output with Real and Imaginary parts separated
+% RlImFD = [real(FD); imag(FD)];
+% 
+% % get magnitude to output also
+% absFD = abs(FD); 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % N = length(temp);
