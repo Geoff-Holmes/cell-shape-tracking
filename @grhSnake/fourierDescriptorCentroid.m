@@ -1,4 +1,4 @@
-function [FD, absFD] = fourierDescriptorCentroid(obj, Npoints)
+function [FD, RlImFD, absFD] = fourierDescriptorCentroid(obj, Npoints)
 
 % [FD, absFD] = fourierDescriptorCentroid(obj, Npoints)
 
