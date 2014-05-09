@@ -34,7 +34,7 @@ sclFD = rawFD / maxAbs;
 % get phase of largest mag component
 thK = angle(sclFD(indk));
 
-% get phase change for all possible start points of the shape
+% get base phase change for all possible start points of the shape
 N = length(rawFD);
 phs = (0:N-1) * 2*pi/N;
 
