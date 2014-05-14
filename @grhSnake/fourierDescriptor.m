@@ -1,4 +1,4 @@
-function [FD, RlImFD, absFD] = fourierDescriptor(obj, Npoints)
+function [FD, RlImFD, absFD, flag] = fourierDescriptor(obj, Npoints)
 
 % [FD, RlImFD, absFD] = fourierDescriptor(obj, Npoints)
 %
@@ -22,6 +22,9 @@ function [FD, RlImFD, absFD] = fourierDescriptor(obj, Npoints)
 % use S = ifft(FD) 
 % n.b. in the above FD is the complex centred Fourier descriptor not the
 % absolute values of the components.
+
+% flag true if exited normally
+flag = 1;
 
 if nargin == 1
     % default number
@@ -54,6 +57,7 @@ try
     assert(ind == 2);
 catch
     display('Incorrectly composed boundary - Fourier descriptor normalisation compromised')
+    flag = 0;
 end
 rawFD = rawFD / abs(rawFD(2));
 
