@@ -1,6 +1,6 @@
-function [FD, RlImFD, absFD, flag] = fourierDescriptor(obj, Npoints)
+function [FD, RlImFD, absFD, rawFD] = fourierDescriptor(obj, Npoints)
 
-% [FD, RlImFD, absFD] = fourierDescriptor(obj, Npoints)
+% [FD, RlImFD, absFD, rawFD] = fourierDescriptor(obj, Npoints)
 %
 % calculate fourier shape descriptor using MATLAB fft
 %
@@ -23,20 +23,21 @@ function [FD, RlImFD, absFD, flag] = fourierDescriptor(obj, Npoints)
 % n.b. in the above FD is the complex centred Fourier descriptor not the
 % absolute values of the components.
 
-% flag true if exited normally
-flag = 1;
-
 if nargin == 1
     % default number
-    Npoints = 33;
+    Npoints = 31;
 else
-    if ~mod(Npoints, 2)
+    while ~isprime(Npoints)
         Npoints = Npoints + 1;
     end
 end
 
 % get un-normalised Fourier Descriptor
-rawFD = fft(obj.curve(-Npoints));
+outline = obj.curve(-Npoints);
+if ~grhGetOrientation(outline)
+    outline = wrev(outline);
+end
+rawFD = fft(outline);
 
 % NORMALISATION: my own method based on an understanding of  Gonzalez
 % 'Digital Image Processing' (2nd Edition) p404f, :  The reasoning is as
@@ -47,30 +48,31 @@ rawFD = fft(obj.curve(-Npoints));
 % phase of the largest component to zero and minimises the phase of the
 % second largest component (considered over range [0 2pi).
 % %
+tempFD = rawFD;
 % set DC to zero
-rawFD(1) = 0;
+tempFD(1) = 0;
 % make scale invariant
 % this assume a simple closed figure traced anti-clockwise in which case
 % the second component has the largest magnitude
 try
-    [~, ind] = max(rawFD);
+    [~, ind] = max(tempFD);
     assert(ind == 2);
 catch
-    display('Incorrectly composed boundary - Fourier descriptor normalisation compromised')
+    display('Second component not largest magnitude')
     flag = 0;
 end
-rawFD = rawFD / abs(rawFD(2));
+tempFD = tempFD / abs(tempFD(2));
 
 % find index of second largest magnitude component
-[~, indk] = max(abs(rawFD(3:end)));
+[~, indk] = max(abs(tempFD(3:end)));
 indk = indk + 2;
 
 % get phase of largest and second largest (kth) components
-th1 = angle(rawFD(2));
-thK = angle(rawFD(indk));
+th1 = angle(tempFD(2));
+thK = angle(tempFD(indk));
 
 % get phase change for all possible start points of shape
-N = length(rawFD);
+N = length(tempFD);
 phs = (0:N-1) * 2*pi/N;
 
 % get phase of component k after all these starting point shifts 
@@ -80,7 +82,7 @@ thK = thK - th1 - phs + (indk-1) * phs;
 [~, indSt] = min(mod(thK, 2*pi));
 
 % normalise for start point and rotation
-FD = rawFD .* exp(1j * ((-th1-phs(indSt)) + (0:N-1)'*phs(indSt))); 
+FD = tempFD .* exp(1j * ((-th1-phs(indSt)) + (0:N-1)'*phs(indSt))); 
 
 % output with Real and Imaginary parts separated
 RlImFD = [real(FD); imag(FD)];
@@ -93,9 +95,9 @@ absFD = abs(FD);
 
 % if nargin == 3 && strcmp(option, 'centre')
 %     % centre the transform
-%     inds = 0:length(temp)-1;
+%     inds = 0:length(tempFD)-1;
 %     fac  = (-1).^inds;
-%     temp = fac' .* temp;
+%     tempFD = fac' .* tempFD;
 % end
 
 
@@ -105,23 +107,23 @@ absFD = abs(FD);
 % % normalized fourier descriptors"
 % % % 
 % % set DC to zero
-% temp(1) = 0;
+% tempFD(1) = 0;
 % % make scale invariant
 % % this assume a simple closed figure traced anti-clockwise in which case
 % % the second component has the largest magnitude
 % try
-%     [~, ind] = max(temp);
+%     [~, ind] = max(tempFD);
 %     assert(ind == 2);
 % catch
 %     display('Incorrectly composed boundary - Fourier descriptor normalisation compromised')
 % end
-% temp = temp / abs(temp(2));
+% tempFD = tempFD / abs(tempFD(2));
 % % find index of second largest magnitude component
-% [~, indk] = max(abs(temp(3:end)));
+% [~, indk] = max(abs(tempFD(3:end)));
 % indk = indk + 2
 % % get phase of first and second largest components
-% th1 = angle(temp(2));
-% thk = angle(temp(indk));
+% th1 = angle(tempFD(2));
+% thk = angle(tempFD(indk));
 % 
 % % get angle required for rotation and start point to transform these two
 % % phases to zero which is the final normalisation requirement
@@ -129,14 +131,14 @@ absFD = abs(FD);
 % % get the multiple alternative start point angles
 % A2 = A(2) + (0:indk-2)*2*pi/indk;
 % % apply rotation and starting point alteration
-% k = 0:length(temp)-1;
-% FD{1} = temp .* exp(1i*(A(1) + k'*A(2)));
+% k = 0:length(tempFD)-1;
+% FD{1} = tempFD .* exp(1i*(A(1) + k'*A(2)));
 % % compute the ambiguity resolving criteria
 % ARC(1) = sum(real(FD{1}).*abs(real(FD{1})));
 % 
 % for cc = 2:indk-1
 %     % get to next candidate start location
-%     FD{cc} = temp .* exp(1i*(A(1) + k'*A2(cc)));
+%     FD{cc} = tempFD .* exp(1i*(A(1) + k'*A2(cc)));
 %     % compute the ambiguity resolving criteria
 %     ARC(cc) = sum(real(FD{cc}).*abs(real(FD{cc})));
 % end
@@ -152,7 +154,7 @@ absFD = abs(FD);
 % absFD = abs(FD); 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% N = length(temp);
+% N = length(tempFD);
 % % N must be even
 % assert(~mod(N,2));
 %     
@@ -162,10 +164,10 @@ absFD = abs(FD);
 % %
 % % make translation invariant by setting DC component to zero
 % % make scale invariant by normalising by largest fourier component
-% temp(N/2+1) = 0;
-% temp = temp / abs(temp(N/2+2));
+% tempFD(N/2+1) = 0;
+% tempFD = tempFD / abs(tempFD(N/2+2));
 % % find index of second largest magnitude component
-% dummy = temp; dummy(N/2+2)=0;
+% dummy = tempFD; dummy(N/2+2)=0;
 % [~, indk] = max(abs(dummy));
 % mk = abs(indk-N/2-1);
 % 
@@ -173,7 +175,7 @@ absFD = abs(FD);
 % 
 % % transform to set these phases to zero
 % i = -N/2+1:N/2; i = i';
-% FD{1} = temp .* exp(1j*((i-indk)*th1 + (1-i)*thk)*(indk-1));
+% FD{1} = tempFD .* exp(1j*((i-indk)*th1 + (1-i)*thk)*(indk-1));
 % % compute the ambiguity resolving criteria
 % ARC(1) = sum(real(FD{1}).*abs(real(FD{1})));
 % 
