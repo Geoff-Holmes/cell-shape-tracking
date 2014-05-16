@@ -1,5 +1,7 @@
-function result = grhGetOrientation(p)
+function result = grhGetOrientation(p, plt)
 
+% result = grhGetOrientation(p, plt)
+% 
 % get orientation of shape defined by points p
 % result is 1 if anticlockwise, 0 if clockwise
 
@@ -22,8 +24,10 @@ end
 % ensure first two points are added at end
 p = [p; p(1:2,:)];
 
+if nargin > 1 && plt
 for i = 1: si+1
     line(p(i:i+1,1), p(i:i+1,2));
+end
 end
 
 % get edge vectors
