@@ -54,8 +54,8 @@ tempFD(1) = 0;
 % make scale invariant
 % this assume a simple closed figure traced anti-clockwise in which case
 % the second component has the largest magnitude ** not necessarily
-[~, ind] = max(tempFD);
-tempFD = tempFD / abs(tempFD(ind));
+[mx, ind] = max(tempFD);
+tempFD = tempFD / abs(mx);
 
 % find index of second largest magnitude component
 [~, indk] = max([tempFD(1:ind-1); 0; tempFD(ind+1:end)]);
@@ -69,15 +69,18 @@ thK = angle(tempFD(indk));
 phs = (0:Npoints-1) * 2*pi/Npoints;
 
 % get phase of component k after all these starting point shifts 
+% combined with rotation to make largest component have zero phase
 % thK = thK - th1 - (ind-1) * phs + (indk-1) * phs;
 thK = thK - th1 + (indk - ind) * phs;
 
 % find the starting point where component k has minimum phase in [0, 2pi)
-[~, indSt] = min(mod(thK, 2*pi));
+[mnpK, indSt] = min(mod(thK, 2*pi));
 
 % normalise for start point and rotation
 FD = tempFD .* ...
     exp(1j * ((-th1-(ind-1)*phs(indSt)) + (0:Npoints-1)'*phs(indSt))); 
+    
+assert mnPK == angle(FD(indk))
 
 % output with Real and Imaginary parts separated
 RlImFD = [real(FD); imag(FD)];
