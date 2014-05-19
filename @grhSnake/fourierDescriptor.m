@@ -32,11 +32,13 @@ else
     end
 end
 
-% get un-normalised Fourier Descriptor
+% get  shape outline
 outline = obj.curve(-Npoints);
 if ~grhGetOrientation(outline)
     outline = wrev(outline);
 end
+
+% get raw / un-normalised Fourier descriptor via fast fourier transform
 rawFD = fft(outline);
 
 % NORMALISATION: my own method based on an understanding of  Gonzalez
@@ -80,7 +82,7 @@ thK = thK - th1 + (indk - ind) * phs;
 FD = tempFD .* ...
     exp(1j * ((-th1-(ind-1)*phs(indSt)) + (0:Npoints-1)'*phs(indSt))); 
     
-assert mnPK == angle(FD(indk))
+assert (abs(mnpK - angle(FD(indk))) < 1e-10);
 
 % output with Real and Imaginary parts separated
 RlImFD = [real(FD); imag(FD)];
