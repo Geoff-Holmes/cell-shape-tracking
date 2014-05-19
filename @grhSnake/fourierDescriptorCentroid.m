@@ -4,9 +4,9 @@ function [FD, RlImFD, absFD] = fourierDescriptorCentroid(obj, Npoints)
 
 if nargin == 1
     % default number
-    Npoints = 33;
+    Npoints = 31;
 else
-    if ~mod(Npoints, 2)
+    while ~isprime(Npoints)
         Npoints = Npoints + 1;
     end
 end
