@@ -32,7 +32,7 @@ t = [t t+pi/2];
 % corresonding points
 p = w*exp(1i*t)+z*exp(-1i*t);
 % and the one on the major axis
-[maxR, ind] = max(p);
+[~, ind] = max(p);
 % get the angle of this point which is therefore angle of the major axis
 thetaMajor = angle(p(ind));
 % get angle of minor axis
