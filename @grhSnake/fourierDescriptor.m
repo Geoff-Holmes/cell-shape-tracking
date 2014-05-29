@@ -57,10 +57,12 @@ tempFD(1) = 0;
 % this assume a simple closed figure traced anti-clockwise in which case
 % the second component has the largest magnitude ** not necessarily
 [mx, ind] = max(tempFD);
-tempFD = tempFD / abs(mx);
 
 % find index of second largest magnitude component
 [~, indk] = max([tempFD(1:ind-1); 0; tempFD(ind+1:end)]);
+
+% normalise for scale
+tempFD = tempFD / abs(mx);
 
 % get phase of largest and second largest components
 th1 = angle(tempFD(ind));
