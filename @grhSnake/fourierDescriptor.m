@@ -32,8 +32,34 @@ else
     end
 end
 
-% get  shape outline
-outline = obj.curve(-Npoints);
+% get shape outline
+iregOutline = obj.curve(-Npoints*1000);
+% get circumference
+circum = sum(abs(iregOutline - circshift(iregOutline, 1)));
+% get regular spacing
+space = circum / Npoints;
+% resample with regular spacing
+outline = [iregOutline(1); zeros(Npoints-1, 1)];
+cc = 0;
+for k = 2:Npoints
+    d = 0;
+    while d < space
+        cc = cc+1;
+        d = d + norm(iregOutline(cc+1)-iregOutline(cc));
+    end
+    D(k) = d;
+    outline(k) = iregOutline(cc);
+end
+
+% clf; hold on
+% subplot(1,2,1)
+% plot(iregOutline)
+% plot(outline, 'ro')
+% axis equal
+% subplot(1,2,2)
+% hist(D(2:end),100)
+
+% check and correct for anticlockwise
 if ~grhGetOrientation(outline)
     outline = wrev(outline);
 end
